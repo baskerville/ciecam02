@@ -43,7 +43,7 @@
     }
 
     function rgbToXyz(R, G, B) {
-        var rgb = [toLinear(R), toLinear(G), toLinear(B)],
+        var rgb = [R, G, B].map(toLinear),
             xyz = [];
         for (var i = 0; i < M_RGB_XYZ.length; i++) {
             var row = M_RGB_XYZ[i],
@@ -65,7 +65,7 @@
                 sum += row[j] * xyz[j];
             rgb.push(sum);
         }
-        return [fromLinear(rgb[0]), fromLinear(rgb[1]), fromLinear(rgb[2])];
+        return rgb.map(fromLinear);
     }
 
     function xyzToLuv(X, Y, Z) {
