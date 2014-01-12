@@ -120,7 +120,7 @@
     }
 
     function maxChroma(L, H) {
-        var maxChroma = Number.MAX_VALUE,
+        var maxChroma = Infinity,
             limits = [0, 1];
         for (var i = 0; i < M_XYZ_RGB.length; i++) {
             var row = M_XYZ_RGB[i];
