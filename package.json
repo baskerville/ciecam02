@@ -1,7 +1,7 @@
 {
 	"name": "HuSL",
 	"version": "0.1.0",
-	"description": "HSL for Humans",
+	"description": "Human-friendly HSL",
 	"main": "husl.js",
 	"private": true,
 	"directories": {
