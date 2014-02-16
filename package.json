@@ -1,28 +1,28 @@
 {
-  "name": "HuSL",
-  "version": "0.1.0",
-  "description": "HSL for Humans",
-  "main": "husl.js",
-  "private": true,
-  "directories": {
-    "test": "test"
-  },
-  "scripts": {
-    "test": "mocha"
-  },
-  "devDependencies": {
-  	  "mocha": "*",
-  	  "chai": "*"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/baskerville/HuSL.git"
-  },
-  "keywords": ["color", "color space", "CIELUV", "CIELCHuv", "HSL"],
-  "author": "Bastien Dejean",
-  "license": "BSD",
-  "bugs": {
-    "url": "https://github.com/baskerville/HuSL/issues"
-  },
-  "homepage": "https://github.com/baskerville/HuSL"
+	"name": "HuSL",
+	"version": "0.1.0",
+	"description": "HSL for Humans",
+	"main": "husl.js",
+	"private": true,
+	"directories": {
+		"test": "test"
+	},
+	"scripts": {
+		"test": "mocha"
+	},
+	"devDependencies": {
+		"mocha": "*",
+		"chai": "*"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/baskerville/HuSL.git"
+	},
+	"keywords": ["color", "color space", "CIELUV", "CIELCHuv", "HSL"],
+	"author": "Bastien Dejean",
+	"license": "BSD",
+	"bugs": {
+		"url": "https://github.com/baskerville/HuSL/issues"
+	},
+	"homepage": "https://github.com/baskerville/HuSL"
 }
