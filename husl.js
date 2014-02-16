@@ -166,9 +166,14 @@
 		return '#' + hex;
 	}
 
-	this.husl = {
+	var root = {
 		'toHex': toHex,
 		'fromHex': fromHex
 	};
+
+	if (typeof module == "object" && module != null)
+		module.exports = root;
+
+	this.husl = root;
 
 })();
