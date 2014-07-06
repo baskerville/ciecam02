@@ -160,7 +160,7 @@
 		'fromHex': fromHex
 	};
 
-	if (module instanceof Object)
+	if (typeof module == "object" && module != null)
 		module.exports = root;
 
 	this.husl = root;
