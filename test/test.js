@@ -1,7 +1,7 @@
-var husl = require('../husl');
-var expect = require('chai').expect;
+var husl = require('../husl'),
+    expect = require('chai').expect,
+    comp = [];
 
-var comp = [];
 for (var i = 0; i < 16; i++) {
 	var h = i.toString(16);
 	comp.push(h + h);
