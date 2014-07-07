@@ -155,14 +155,14 @@
 		return '#' + hex;
 	}
 
-	var root = {
+	var api = {
 		'toHex': toHex,
 		'fromHex': fromHex
 	};
 
-	if (typeof module == "object" && module != null)
-		module.exports = root;
-
-	this.husl = root;
+	if (typeof module == "undefined")
+		this.husl = api;
+	else
+		module.exports = api;
 
 })();
