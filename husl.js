@@ -161,7 +161,7 @@
 	};
 
 	if (typeof module == "undefined")
-		this.husl = api;
+		window.husl = api;
 	else
 		module.exports = api;
 
