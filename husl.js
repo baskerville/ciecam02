@@ -145,19 +145,19 @@
 		    luv = lchToLuv(lch[0], lch[1], lch[2]),
 		    xyz = luvToXyz(luv[0], luv[1], luv[2]),
 		    rgb = xyzToRgb(xyz[0], xyz[1], xyz[2]);
-		var hex = '';
+		var hex = "";
 		for (var i = 0; i < rgb.length; i++) {
 			var c = Math.round(rgb[i] * 255).toString(16);
 			if (c.length == 1)
-				c = '0' + c;
+				c = "0" + c;
 			hex += c;
 		}
-		return '#' + hex;
+		return "#" + hex;
 	}
 
 	var api = {
-		'toHex': toHex,
-		'fromHex': fromHex
+		toHex: toHex,
+		fromHex: fromHex
 	};
 
 	if (typeof module == "undefined")
