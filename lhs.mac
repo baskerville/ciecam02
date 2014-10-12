@@ -1,7 +1,7 @@
 /* References: */
 /* http://www.brucelindbloom.com/ */
 /* https://github.com/jrus/chromatist */
-/* https://github.com/boronine/husl */
+/* http://www.boronine.com/husl/ */
 
 /* D65 white point */
 refX: 0.95047;

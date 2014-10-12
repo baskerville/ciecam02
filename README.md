@@ -7,4 +7,4 @@ fromHex(hex) -> [L, H, S]
 
 # Credits
 
-Based on Alexei Boronine's [HuSL](https://github.com/boronine/husl).
+Based on Alexei Boronine's [HuSL](http://www.boronine.com/husl/).
