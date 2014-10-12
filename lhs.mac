@@ -126,11 +126,11 @@ limitChromas(L, H) := block([XYZ, M, i, j, results],
 
 positivep(x) := x > 0; 
 
-RGB2HUSL(R, G, B) := block([LCH, chromas, maxC],
+RGB2LHS(R, G, B) := block([LCH, chromas, maxC],
                            LCH : RGB2LCH(R, G, B),
                            chromas: limitChromas(LCH[1], LCH[3]),
                            maxChroma: lmin(sublist(chromas, positivep)),
-                           [LCH[3], 100 * LCH[2] / maxChroma, LCH[1]]);
+                           [LCH[1], LCH[3], 100 * LCH[2] / maxChroma]);
 
 ratprint: false;                                 
 

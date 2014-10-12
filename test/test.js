@@ -1,4 +1,4 @@
-var husl = require('../husl'),
+var lhs = require('../lhs'),
     expect = require('chai').expect,
     comp = [];
 
@@ -14,26 +14,26 @@ var black = "#000000",
     green = "#00FF00",
     blue = "#0000FF";
 
-describe('HuSL', function () {
+describe('LHS', function () {
+	it('lightness order', function () {
+		expect(lhs.fromHex(black)[0]).to.be.below(lhs.fromHex(grey)[0]);
+		expect(lhs.fromHex(grey)[0]).to.be.below(lhs.fromHex(white)[0]);
+		expect(lhs.fromHex(blue)[0]).to.be.below(lhs.fromHex(red)[0]);
+		expect(lhs.fromHex(red)[0]).to.be.below(lhs.fromHex(green)[0]);
+	});
 	it('hue order', function () {
-		expect(husl.fromHex(red)[0]).to.be.below(husl.fromHex(green)[0]);
-		expect(husl.fromHex(green)[0]).to.be.below(husl.fromHex(blue)[0]);
+		expect(lhs.fromHex(red)[1]).to.be.below(lhs.fromHex(green)[1]);
+		expect(lhs.fromHex(green)[1]).to.be.below(lhs.fromHex(blue)[1]);
 	});
 	it('saturation order', function () {
-		expect(husl.fromHex(grey)[1]).to.be.below(husl.fromHex(red)[1]);
-	});
-	it('lightness order', function () {
-		expect(husl.fromHex(black)[2]).to.be.below(husl.fromHex(grey)[2]);
-		expect(husl.fromHex(grey)[2]).to.be.below(husl.fromHex(white)[2]);
-		expect(husl.fromHex(blue)[2]).to.be.below(husl.fromHex(red)[2]);
-		expect(husl.fromHex(red)[2]).to.be.below(husl.fromHex(green)[2]);
+		expect(lhs.fromHex(grey)[2]).to.be.below(lhs.fromHex(red)[2]);
 	});
 	it('saturation upper bound', function () {
 		comp.forEach(function (r) {
 			comp.forEach(function (g) {
 				comp.forEach(function (b) {
-					var c = husl.fromHex("#" + r + g + b);
-					expect(c[1]).to.be.below(100.1);
+					var c = lhs.fromHex("#" + r + g + b);
+					expect(c[2]).to.be.below(100.1);
 				});
 			});
 		});

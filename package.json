@@ -1,8 +1,8 @@
 {
-	"name": "HuSL",
+	"name": "LHS",
 	"version": "0.1.0",
 	"description": "Human-friendly HSL",
-	"main": "husl.js",
+	"main": "lhs.js",
 	"private": true,
 	"directories": {
 		"test": "test"
@@ -16,13 +16,13 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git://github.com/baskerville/HuSL.git"
+		"url": "git://github.com/baskerville/LHS.git"
 	},
-	"keywords": ["color", "color space", "CIELUV", "CIELCHuv", "HSL"],
+	"keywords": ["color", "color space", "CIELUV", "CIELCHuv"],
 	"author": "Bastien Dejean",
 	"license": "BSD",
 	"bugs": {
-		"url": "https://github.com/baskerville/HuSL/issues"
+		"url": "https://github.com/baskerville/LHS/issues"
 	},
-	"homepage": "https://github.com/baskerville/HuSL"
+	"homepage": "https://github.com/baskerville/LHS"
 }

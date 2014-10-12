@@ -122,11 +122,11 @@
 		return maxChroma;
 	}
 
-	function lchToHusl(L, C, H) {
-		return [H, 100 * C / maxChroma(L, H), L];
+	function lchToLhs(L, C, H) {
+		return [L, H, 100 * C / maxChroma(L, H)];
 	}
 
-	function huslToLch(H, S, L) {
+	function lhsToLch(L, H, S) {
 		return [L, S * maxChroma(L, H) / 100, H];
 	}
 
@@ -137,11 +137,11 @@
 		var xyz = rgbToXyz(rgb[0], rgb[1], rgb[2]),
 		    luv = xyzToLuv(xyz[0], xyz[1], xyz[2]),
 		    lch = luvToLch(luv[0], luv[1], luv[2]);
-		return lchToHusl(lch[0], lch[1], lch[2]);
+		return lchToLhs(lch[0], lch[1], lch[2]);
 	}
 
-	function toHex(H, S, L) {
-		var lch = huslToLch(H, S, L),
+	function toHex(L, H, S) {
+		var lch = lhsToLch(L, H, S),
 		    luv = lchToLuv(lch[0], lch[1], lch[2]),
 		    xyz = luvToXyz(luv[0], luv[1], luv[2]),
 		    rgb = xyzToRgb(xyz[0], xyz[1], xyz[2]);
@@ -161,7 +161,7 @@
 	};
 
 	if (typeof module == "undefined")
-		window.husl = api;
+		window.lhs = api;
 	else
 		module.exports = api;
 
