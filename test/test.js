@@ -1,4 +1,4 @@
-var lhs = require('../lhs'),
+var lhs = require('..'),
     expect = require('chai').expect,
     comp = [];
 

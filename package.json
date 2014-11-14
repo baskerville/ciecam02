@@ -2,7 +2,7 @@
 	"name": "LHS",
 	"version": "0.1.0",
 	"description": "Human-friendly color space",
-	"main": "lhs.js",
+	"main": "index.js",
 	"private": true,
 	"directories": {
 		"test": "test"
