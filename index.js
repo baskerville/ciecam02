@@ -13,13 +13,13 @@
 	// sRGB D65 matrices
 	// Their product should be as close as possible to the unit matrix
 
-	var M_RGB_XYZ = [[.4124564391, .3575760776, .1804374833],
-	                 [.2126728514, .7151521553, .07217499331],
-	                 [.01933389558, .1191920259, .9503040785]];
+	var M_RGB_XYZ = [[0.4124564391, 0.3575760776, 0.1804374833],
+	                 [0.2126728514, 0.7151521553, 0.07217499331],
+	                 [0.01933389558, 0.1191920259, 0.9503040785]];
 
-	var M_XYZ_RGB = [[3.240454162, -1.537138513, -.4985314096],
-	                 [-.9692660305, 1.876010845, .04155601753],
-	                 [.05564343096, -.2040259135, 1.057225188]];
+	var M_XYZ_RGB = [[3.240454162, -1.537138513, -0.4985314096],
+	                 [-0.9692660305, 1.876010845, 0.04155601753],
+	                 [0.05564343096, -0.2040259135, 1.057225188]];
 
 	// Inverse sRGB Companding
 	function toLinear(v) { 
@@ -37,8 +37,9 @@
 		for (var i = 0; i < M_RGB_XYZ.length; i++) {
 			var row = M_RGB_XYZ[i],
 			    sum = 0;
-			for (var j = 0; j < row.length; j++)
+			for (var j = 0; j < row.length; j++) {
 				sum += row[j] * rgb[j];
+			}
 			xyz.push(sum);
 		}
 		return xyz;
@@ -50,8 +51,9 @@
 		for (var i = 0; i < M_XYZ_RGB.length; i++) {
 			var row = M_XYZ_RGB[i],
 				sum = 0;
-			for (var j = 0; j < row.length; j++)
+			for (var j = 0; j < row.length; j++) {
 				sum += row[j] * xyz[j];
+			}
 			rgb.push(sum);
 		}
 		return rgb.map(fromLinear);
@@ -60,8 +62,9 @@
 	function xyzToLuv(X, Y, Z) {
 		var y = Y / refY,
 		    L = (y <= epsilon ? kappa*y : 116*Math.pow(y, 1/3)-16);
-		if (L == 0)
+		if (L === 0) {
 			return [0, 0, 0];
+		}
 		var u = 4 * X / (X + 15 * Y + 3 * Z),
 		    v = 9 * Y / (X + 15 * Y + 3 * Z),
 		    U = 13 * L * (u - refU),
@@ -70,8 +73,9 @@
 	}
 
 	function luvToXyz(L, U, V) {
-		if (L == 0)
+		if (L === 0) {
 			return [0, 0, 0];
+		}
 		var u = refU + U / (13 * L),
 		    v = refV + V / (13 * L),
 		    Y = refY * (L > kappa*epsilon ? Math.pow((L+16)/116, 3) : L/kappa),
@@ -83,8 +87,9 @@
 	function luvToLch(L, U, V) {
 		var C = Math.sqrt(Math.pow(U, 2) + Math.pow(V, 2)),
 		    H = 180 * Math.atan2(V, U) / Math.PI;
-		if (H < 0)
+		if (H < 0) {
 			H += 360;
+		}
 		return [L, C, H];
 	}
 
@@ -109,17 +114,18 @@
 	}
 
 	function maxChroma(L, H) {
-		var maxChroma = Infinity,
+		var max = Infinity,
 		    limits = [0, 1];
 		for (var i = 0; i < M_XYZ_RGB.length; i++) {
 			var row = M_XYZ_RGB[i];
 			for (var j = 0; j < limits.length; j++) {
 				var C = chroma(L, H, row[0], row[1], row[2], limits[j]);
-				if (C > 0 && C < maxChroma)
-					maxChroma = C;
+				if (C > 0 && C < max) {
+					max = C;
+				}
 			}
 		}
-		return maxChroma;
+		return max;
 	}
 
 	function lchToLhs(L, C, H) {
@@ -132,8 +138,9 @@
 
 	function fromHex(hex) {
 		var rgb = [];
-		for (var i = 0; i < 3; i++)
+		for (var i = 0; i < 3; i++) {
 			rgb.push(parseInt(hex.substr(1 + 2 * i, 2), 16) / 255);
+		}
 		var xyz = rgbToXyz(rgb[0], rgb[1], rgb[2]),
 		    luv = xyzToLuv(xyz[0], xyz[1], xyz[2]),
 		    lch = luvToLch(luv[0], luv[1], luv[2]);
@@ -148,8 +155,9 @@
 		var hex = "";
 		for (var i = 0; i < rgb.length; i++) {
 			var c = Math.round(rgb[i] * 255).toString(16);
-			if (c.length == 1)
+			if (c.length == 1) {
 				c = "0" + c;
+			}
 			hex += c;
 		}
 		return "#" + hex;
@@ -160,9 +168,10 @@
 		fromHex: fromHex
 	};
 
-	if (typeof module == "undefined")
+	if (typeof module == "undefined") {
 		window.lhs = api;
-	else
+	} else {
 		module.exports = api;
+	}
 
 })();
