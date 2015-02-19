@@ -22,16 +22,16 @@
 	                 [0.05564343096, -0.2040259135, 1.057225188]];
 
 	// Inverse sRGB Companding
-	function toLinear(v) { 
+	function toLinear (v) {
 		return (v <= 0.04045 ? v/12.92 : Math.pow((v+0.055)/1.055, 2.4));
 	}
 
 	// sRGB Companding
-	function fromLinear(v) { 
+	function fromLinear (v) {
 		return (v <= 0.0031308 ? 12.92*v : 1.055*Math.pow(v, 1/2.4)-0.055);
 	}
 
-	function rgbToXyz(R, G, B) {
+	function rgbToXyz (R, G, B) {
 		var rgb = [R, G, B].map(toLinear),
 		    xyz = [];
 		for (var i = 0; i < M_RGB_XYZ.length; i++) {
@@ -45,7 +45,7 @@
 		return xyz;
 	}
 
-	function xyzToRgb(X, Y, Z) {
+	function xyzToRgb (X, Y, Z) {
 		var xyz = [X, Y, Z],
 		    rgb = [];
 		for (var i = 0; i < M_XYZ_RGB.length; i++) {
@@ -59,7 +59,7 @@
 		return rgb.map(fromLinear);
 	}
 
-	function xyzToLuv(X, Y, Z) {
+	function xyzToLuv (X, Y, Z) {
 		var y = Y / refY,
 		    L = (y <= epsilon ? kappa*y : 116*Math.pow(y, 1/3)-16);
 		if (L === 0) {
@@ -72,7 +72,7 @@
 		return [L, U, V];
 	}
 
-	function luvToXyz(L, U, V) {
+	function luvToXyz (L, U, V) {
 		if (L === 0) {
 			return [0, 0, 0];
 		}
@@ -84,7 +84,7 @@
 		return [X, Y, Z];
 	}
 
-	function luvToLch(L, U, V) {
+	function luvToLch (L, U, V) {
 		var C = Math.sqrt(Math.pow(U, 2) + Math.pow(V, 2)),
 		    H = 180 * Math.atan2(V, U) / Math.PI;
 		if (H < 0) {
@@ -93,14 +93,14 @@
 		return [L, C, H];
 	}
 
-	function lchToLuv(L, C, H) {
+	function lchToLuv (L, C, H) {
 		var rad = Math.PI * H / 180,
 		    U = C * Math.cos(rad),
 		    V = C * Math.sin(rad);
 		return [L, U, V];
 	}
 
-	function chroma(L, H, m1, m2, m3, t) {
+	function chroma (L, H, m1, m2, m3, t) {
 		var psi = (L > kappa*epsilon ? Math.pow(L+16, 3)/1560896 : L/kappa),
 		    rad = Math.PI * H / 180,
 		    cos = Math.cos(rad),
@@ -113,7 +113,7 @@
 		return (top1 * L * psi - top2) / ((bot1 * sin + bot2 * cos) * psi + bot3);
 	}
 
-	function maxChroma(L, H) {
+	function maxChroma (L, H) {
 		var max = Infinity,
 		    limits = [0, 1];
 		for (var i = 0; i < M_XYZ_RGB.length; i++) {
@@ -128,15 +128,15 @@
 		return max;
 	}
 
-	function lchToLhs(L, C, H) {
+	function lchToLhs (L, C, H) {
 		return [L, H, 100 * C / maxChroma(L, H)];
 	}
 
-	function lhsToLch(L, H, S) {
+	function lhsToLch (L, H, S) {
 		return [L, S * maxChroma(L, H) / 100, H];
 	}
 
-	function fromHex(hex) {
+	function fromHex (hex) {
 		var rgb = [];
 		for (var i = 0; i < 3; i++) {
 			rgb.push(parseInt(hex.substr(1 + 2 * i, 2), 16) / 255);
@@ -147,7 +147,7 @@
 		return lchToLhs(lch[0], lch[1], lch[2]);
 	}
 
-	function toHex(L, H, S) {
+	function toHex (L, H, S) {
 		var lch = lhsToLch(L, H, S),
 		    luv = lchToLuv(lch[0], lch[1], lch[2]),
 		    xyz = luvToXyz(luv[0], luv[1], luv[2]),
