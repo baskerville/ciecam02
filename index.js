@@ -136,13 +136,23 @@
 		return [L, S * maxChroma(L, H) / 100, H];
 	}
 
-	function fromHex (hex) {
+	function hexToRgb (hex) {
 		var rgb = [];
 		for (var i = 0; i < 3; i++) {
 			rgb.push(parseInt(hex.substr(1 + 2 * i, 2), 16) / 255);
 		}
-		var xyz = rgbToXyz(rgb[0], rgb[1], rgb[2]),
-		    luv = xyzToLuv(xyz[0], xyz[1], xyz[2]),
+		return rgb;
+	}
+
+	function hexToLuv (hex) {
+		var rgb = hexToRgb(hex),
+		    xyz = rgbToXyz(rgb[0], rgb[1], rgb[2]),
+		    luv = xyzToLuv(xyz[0], xyz[1], xyz[2]);
+		return luv;
+	}
+
+	function fromHex (hex) {
+		var luv = hexToLuv(hex),
 		    lch = luvToLch(luv[0], luv[1], luv[2]);
 		return lchToLhs(lch[0], lch[1], lch[2]);
 	}
@@ -163,9 +173,16 @@
 		return "#" + hex;
 	}
 
+	function distance (hex1, hex2) {
+		var v1 = hexToLuv(hex1),
+		    v2 = hexToLuv(hex2);
+		return Math.sqrt(Math.pow(v1[0]-v2[0], 2)+Math.pow(v1[1]-v2[1], 2)+Math.pow(v1[2]-v2[2], 2));
+	}
+
 	var api = {
 		toHex: toHex,
-		fromHex: fromHex
+		fromHex: fromHex,
+		distance: distance
 	};
 
 	if (typeof module == "undefined") {
