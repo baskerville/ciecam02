@@ -21,18 +21,17 @@
 	                 [-0.9692660305, 1.876010845, 0.04155601753],
 	                 [0.05564343096, -0.2040259135, 1.057225188]];
 
-	// Inverse sRGB Companding
-	function toLinear (v) {
-		return (v <= 0.04045 ? v/12.92 : Math.pow((v+0.055)/1.055, 2.4));
-	}
-
-	// sRGB Companding
-	function fromLinear (v) {
-		return (v <= 0.0031308 ? 12.92*v : 1.055*Math.pow(v, 1/2.4)-0.055);
-	}
+	var sRGBGamma = {
+		encode: function (v) {
+			return (v <= 0.0031308 ? 12.92*v : 1.055*Math.pow(v, 1/2.4)-0.055);
+		},
+		decode: function (v) {
+			return (v <= 0.04045 ? v/12.92 : Math.pow((v+0.055)/1.055, 2.4));
+		}
+	};
 
 	function rgbToXyz (R, G, B) {
-		var rgb = [R, G, B].map(toLinear),
+		var rgb = [R, G, B].map(sRGBGamma.decode),
 		    xyz = [];
 		for (var i = 0; i < M_RGB_XYZ.length; i++) {
 			var row = M_RGB_XYZ[i],
@@ -56,7 +55,7 @@
 			}
 			rgb.push(sum);
 		}
-		return rgb.map(fromLinear);
+		return rgb.map(sRGBGamma.encode);
 	}
 
 	function xyzToLuv (X, Y, Z) {
