@@ -181,7 +181,8 @@
 	var api = {
 		toHex: toHex,
 		fromHex: fromHex,
-		distance: distance
+		distance: distance,
+		maxChroma: maxChroma
 	};
 
 	if (typeof module == "undefined") {
