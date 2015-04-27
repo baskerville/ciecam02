@@ -12,7 +12,10 @@ var black = "#000000",
     white = "#FFFFFF",
     red = "#FF0000",
     green = "#00FF00",
-    blue = "#0000FF";
+    blue = "#0000FF",
+    yellow = "#FFFF00",
+    cyan = "#00FFFF",
+    magenta = "#FF00FF";
 
 describe('LHS', function () {
 	it('lightness order', function () {
@@ -37,5 +40,14 @@ describe('LHS', function () {
 				});
 			});
 		});
+	});
+	it('distance', function () {
+		expect(lhs.distance(grey, black)).to.be.below(lhs.distance(black, white));
+		expect(lhs.distance(red, yellow)).to.be.below(lhs.distance(red, green));
+		expect(lhs.distance(green, cyan)).to.be.below(lhs.distance(green, blue));
+		expect(lhs.distance(blue, magenta)).to.be.below(lhs.distance(blue, red));
+	});
+	it('maxChroma', function () {
+		expect(lhs.maxChroma(20, 60)).to.be.below(lhs.maxChroma(50, 30));
 	});
 });
