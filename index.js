@@ -1,7 +1,7 @@
 var matrix = require("./matrix");
 
 // sRGB primaries
-// http://www.brucelindbloom.com/index.html?WorkingSpaceInfo.html
+// http://www.brucelindbloom.com/WorkingSpaceInfo.html
 var x_r = 0.64;
     y_r = 0.33;
     x_g = 0.30;
