@@ -1,12 +1,9 @@
 {
-	"name": "LHS",
-	"version": "0.1.0",
-	"description": "Human-friendly color space",
-	"main": "index.js",
 	"private": true,
-	"directories": {
-		"test": "test"
-	},
+	"name": "LHC",
+	"version": "0.2.0",
+	"description": "An implementation of the CIELCHuv color space",
+	"main": "index.js",
 	"scripts": {
 		"test": "mocha"
 	},
@@ -16,13 +13,13 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git://github.com/baskerville/LHS.git"
+		"url": "git://github.com/baskerville/LHC.git"
 	},
 	"keywords": ["color", "color space", "CIELUV", "CIELCHuv"],
 	"author": "Bastien Dejean",
 	"license": "BSD",
 	"bugs": {
-		"url": "https://github.com/baskerville/LHS/issues"
+		"url": "https://github.com/baskerville/LHC/issues"
 	},
-	"homepage": "https://github.com/baskerville/LHS"
+	"homepage": "https://github.com/baskerville/LHC"
 }
