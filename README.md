@@ -1,7 +1,3 @@
-# Introduction
-
-This is an implementation of CIELCHuv.
-
 # API
 
 ```
