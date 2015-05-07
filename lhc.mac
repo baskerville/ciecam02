@@ -14,7 +14,7 @@ refU: (4 * refX) / (refX + (15 * refY) + (3 * refZ));
 refV: (9 * refY) / (refX + (15 * refY) + (3 * refZ));
 
 /* Source: */
-/* http://www.brucelindbloom.com/index.html?WorkingSpaceInfo.html */
+/* http://www.brucelindbloom.com/WorkingSpaceInfo.html */
 
 x_r: 0.64;
 y_r: 0.33;
