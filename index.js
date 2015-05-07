@@ -2,11 +2,11 @@ var matrix = require("./matrix");
 
 // sRGB primaries
 // http://www.brucelindbloom.com/WorkingSpaceInfo.html
-var x_r = 0.64;
-    y_r = 0.33;
-    x_g = 0.30;
-    y_g = 0.60;
-    x_b = 0.15;
+var x_r = 0.64,
+    y_r = 0.33,
+    x_g = 0.30,
+    y_g = 0.60,
+    x_b = 0.15,
     y_b = 0.06;
 
 // D65 illuminant
@@ -18,16 +18,16 @@ var refX = 0.95047,
 
 // RGB<->XYZ conversion matrices
 // http://www.brucelindbloom.com/Eqn_RGB_XYZ_Matrix.html
-var X_r = x_r / y_r;
-    Y_r = 1;
+var X_r = x_r / y_r,
+    Y_r = 1,
     Z_r = (1 - x_r - y_r) / y_r;
 
-var X_g = x_g / y_g;
-    Y_g = 1;
+var X_g = x_g / y_g,
+    Y_g = 1,
     Z_g = (1 - x_g - y_g) / y_g;
 
-var X_b = x_b / y_b;
-    Y_b = 1;
+var X_b = x_b / y_b,
+    Y_b = 1,
     Z_b = (1 - x_b - y_b) / y_b;
 
 var M_P = [[X_r, X_g, X_b],
