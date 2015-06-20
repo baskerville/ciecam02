@@ -1,13 +1,13 @@
 var CamConv = require("../dist/cam"),
-	XyzConv = require("../dist/xyz"),
-	UcsConv = require("../dist/ucs"),
+    XyzConv = require("../dist/xyz"),
+    UcsConv = require("../dist/ucs"),
     assert = require('chai').assert,
     ε = 0.05;
 
 describe("Roundtrips", function () {
 	var xc = XyzConv(),
-		cc = CamConv(),
-		uc = UcsConv(),
+	    cc = CamConv(),
+	    uc = UcsConv(),
 	    hex = "#e73e01",
 	    XYZ = xc.fromHex(hex),
 	    correlates = cc.forwardModel(XYZ);
