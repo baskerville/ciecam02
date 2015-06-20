@@ -1,5 +1,13 @@
 // 3x3 matrices operations
 
+function transpose (M) {
+	return (
+		[[M[0][0], M[1][0], M[2][0]],
+		 [M[0][1], M[1][1], M[2][1]],
+		 [M[0][2], M[1][2], M[2][2]]]
+	);
+}
+
 function determinant (M) {
 	return (
 		M[0][0] * (M[2][2]*M[1][1] - M[2][1]*M[1][2]) +
@@ -42,6 +50,7 @@ function product (M, N) {
 }
 
 module.exports = {
+	transpose: transpose,
 	inverse: inverse,
 	product: product,
 	multiply: multiply,

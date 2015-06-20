@@ -1,0 +1,13 @@
+{
+	"esnext": true,
+	"node": true,
+	"wsh": true,
+	"devel": true,
+	"loopfunc": true,
+	"latedef": "nofunc",
+	"unused": "vars",
+	"undef": true,
+	"curly": true
+}
+
+// vim: ft=javascript

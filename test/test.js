@@ -1,64 +1,103 @@
-var lhc = require('..'),
-    expect = require('chai').expect,
-    comp = [];
+var CamConv = require("../dist/cam"),
+	XyzConv = require("../dist/xyz"),
+	UcsConv = require("../dist/ucs"),
+    assert = require('chai').assert,
+    ε = 0.05;
 
-for (var i = 0; i < 16; i++) {
-	var h = i.toString(16);
-	comp.push(h + h);
-}
+describe("Roundtrips", function () {
+	var xc = XyzConv(),
+		cc = CamConv(),
+		uc = UcsConv(),
+	    hex = "#e73e01",
+	    XYZ = xc.fromHex(hex),
+	    correlates = cc.forwardModel(XYZ);
+	it("Xyz", function () {
+		assert.equal(hex, xc.toHex(XYZ));
+	});
+	it("Cam", function () {
+		var rXYZ = cc.reverseModel(correlates);
+		assert.closeTo(XYZ[0], rXYZ[0], ε);
+		assert.closeTo(XYZ[1], rXYZ[1], ε);
+		assert.closeTo(XYZ[2], rXYZ[2], ε);
+	});
+	it("Ucs", function () {
+		var rCorrelates = uc.fromUniform(uc.toUniform(correlates));
+		assert.closeTo(correlates.J, rCorrelates.J, ε);
+		assert.closeTo(correlates.M, rCorrelates.M, ε);
+		assert.closeTo(correlates.h, rCorrelates.h, ε);
+	});
+});
 
-var black = "#000000",
-    grey = "#777777",
-    white = "#ffffff",
-    red = "#ff0000",
-    green = "#00ff00",
-    blue = "#0000ff",
-    yellow = "#ffff00",
-    cyan = "#00ffff",
-    magenta = "#ff00ff";
-
-describe("lhc", function () {
-	it("lightness order", function () {
-		expect(lhc.fromHex(black).L).to.be.below(lhc.fromHex(grey).L);
-		expect(lhc.fromHex(grey).L).to.be.below(lhc.fromHex(white).L);
-		expect(lhc.fromHex(blue).L).to.be.below(lhc.fromHex(red).L);
-		expect(lhc.fromHex(red).L).to.be.below(lhc.fromHex(green).L);
-	});
-	it("lightness accuracy", function () {
-		expect(lhc.fromHex(white).L).to.equal(100);
-	});
-	it("hue order", function () {
-		expect(lhc.fromHex(red).H).to.be.below(lhc.fromHex(green).H);
-		expect(lhc.fromHex(green).H).to.be.below(lhc.fromHex(blue).H);
-	});
-	it("chroma order", function () {
-		expect(lhc.fromHex(grey).C).to.be.below(lhc.fromHex(red).C);
-	});
-	it("chroma upper bound", function () {
-		comp.forEach(function (r) {
-			comp.forEach(function (g) {
-				comp.forEach(function (b) {
-					var hex = "#" + r + g + b,
-					    LHC = lhc.fromHex("#" + r + g + b);
-					expect(LHC.C-lhc.maxChroma(LHC.L, LHC.H)).to.be.below(1e-10);
-				});
-			});
+// http://rit-mcsl.org/fairchild/files/AppModEx.xls
+describe("Fairchild examples", function () {
+	it("Case 1", function () {
+		var cc = CamConv({
+			whitePoint: [95.05, 100.00, 108.88],
+			adaptingLuminance: 318.31,
+			backgroundLuminance: 20,
+			surroundType: "average",
+			discounting: false
 		});
+		var correlates = cc.forwardModel([19.01, 20.00, 21.78]);
+		assert.closeTo(correlates.Q, 195.35, ε);
+		assert.closeTo(correlates.J, 41.73, ε);
+		assert.closeTo(correlates.M, 0.11, ε);
+		assert.closeTo(correlates.C, 0.10, ε);
+		assert.closeTo(correlates.s, 2.36, ε);
+		assert.closeTo(correlates.h, 219.0, ε);
+		assert.closeTo(correlates.H, 278.1, ε);
 	});
-	it("idempotent", function () {
-		[red, green, blue].forEach(function (hex) {
-			expect(lhc.toHex(lhc.fromHex(hex))).to.equal(hex);
+	it("Case 2", function () {
+		var cc = CamConv({
+			whitePoint: [95.05, 100.00, 108.88],
+			adaptingLuminance: 31.83,
+			backgroundLuminance: 20,
+			surroundType: "average",
+			discounting: false
 		});
+		var correlates = cc.forwardModel([57.06, 43.06, 31.96]);
+		assert.closeTo(correlates.Q, 152.67, ε);
+		assert.closeTo(correlates.J, 65.96, ε);
+		assert.closeTo(correlates.M, 41.67, ε);
+		assert.closeTo(correlates.C, 48.57, ε);
+		assert.closeTo(correlates.s, 52.25, ε);
+		assert.closeTo(correlates.h, 19.6, ε);
+		// Fairchild gives an incorrect value of 393.9
+		assert.closeTo(correlates.H, 399.4, ε);
 	});
-	it("distance", function () {
-		expect(lhc.distance(grey, black)).to.be.below(lhc.distance(black, white));
-		expect(lhc.distance(red, yellow)).to.be.below(lhc.distance(red, green));
-		expect(lhc.distance(green, cyan)).to.be.below(lhc.distance(green, blue));
-		expect(lhc.distance(blue, magenta)).to.be.below(lhc.distance(blue, red));
+	it("Case 3", function () {
+		var cc = CamConv({
+			whitePoint: [109.85, 100.00, 35.58],
+			adaptingLuminance: 318.31,
+			backgroundLuminance: 20,
+			surroundType: "average",
+			discounting: false
+		});
+		var correlates = cc.forwardModel([3.53, 6.56, 2.14]);
+		assert.closeTo(correlates.Q, 141.17, ε);
+		assert.closeTo(correlates.J, 21.79, ε);
+		assert.closeTo(correlates.M, 48.80, ε);
+		assert.closeTo(correlates.C, 46.94, ε);
+		assert.closeTo(correlates.s, 58.79, ε);
+		assert.closeTo(correlates.h, 177.1, ε);
+		assert.closeTo(correlates.H, 220.4, ε);
 	});
-	it("maxChroma", function () {
-		expect(lhc.maxChroma(20, 60)).to.be.below(lhc.maxChroma(50, 30));
-		expect(lhc.maxChroma(0, 0)).to.equal(0);
-		expect(lhc.maxChroma(100, 0)).to.equal(0);
+	it("Case 4", function () {
+		var cc = CamConv({
+			whitePoint: [109.85, 100.00, 35.58],
+			adaptingLuminance: 31.83,
+			backgroundLuminance: 20,
+			surroundType: "average",
+			discounting: false
+		});
+		var correlates = cc.forwardModel([19.01, 20.00, 21.78]);
+		assert.closeTo(correlates.Q, 122.83, ε);
+		assert.closeTo(correlates.J, 42.53, ε);
+		assert.closeTo(correlates.M, 44.54, ε);
+		assert.closeTo(correlates.C, 51.92, ε);
+		assert.closeTo(correlates.s, 60.22, ε);
+		assert.closeTo(correlates.h, 248.9, ε);
+		// Fairchild gives an incorrect value of 305.8
+		assert.closeTo(correlates.H, 305.5, ε);
 	});
 });

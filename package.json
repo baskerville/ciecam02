@@ -1,25 +1,27 @@
 {
-	"private": true,
-	"name": "LHC",
-	"version": "0.2.0",
-	"description": "An implementation of the CIELCHuv color space",
-	"main": "index.js",
-	"scripts": {
-		"test": "mocha"
-	},
-	"devDependencies": {
-		"mocha": "*",
-		"chai": "*"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git://github.com/baskerville/LHC.git"
-	},
-	"keywords": ["color", "color space", "CIELUV", "CIELCHuv"],
-	"author": "Bastien Dejean",
-	"license": "BSD",
-	"bugs": {
-		"url": "https://github.com/baskerville/LHC/issues"
-	},
-	"homepage": "https://github.com/baskerville/LHC"
+  "name": "ciecam02",
+  "version": "0.1.0",
+  "description": "An implementation of CIECAM02",
+  "scripts": {
+    "test": "mocha"
+  },
+  "devDependencies": {
+    "chai": "*",
+    "gulp": "*",
+    "gulp-babel": "*",
+    "gulp-jshint": "*",
+    "mocha": "*"
+  },
+  "repository": "github:baskerville/ciecam02.git",
+  "keywords": [
+    "color",
+    "ciecam02"
+  ],
+  "author": "Bastien Dejean",
+  "license": "BSD-2-Clause",
+  "bugs": "https://github.com/baskerville/ciecam02/issues",
+  "homepage": "https://github.com/baskerville/ciecam02",
+  "dependencies": {
+    "mout": "*"
+  }
 }
