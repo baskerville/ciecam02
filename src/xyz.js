@@ -9,15 +9,15 @@ function Converter (rgbSpace=rgb.sRGB, whitePoint=illuminant.D65) {
 
 	var M_P = matrix.transpose(primaries.map(function (v) {
 		var X = v.x / v.y,
-			Y = 1,
-			Z = (1 - v.x - v.y) / v.y;
+		    Y = 1,
+		    Z = (1 - v.x - v.y) / v.y;
 		return [X, Y, Z];
 	}));
 
 	var gamma = rgbSpace.gamma,
-		M_S = matrix.multiply(matrix.inverse(M_P), whitePoint),
-		M_RGB_XYZ = matrix.scalar(M_P, M_S),
-		M_XYZ_RGB = matrix.inverse(M_RGB_XYZ);
+	    M_S = matrix.multiply(matrix.inverse(M_P), whitePoint),
+	    M_RGB_XYZ = matrix.scalar(M_P, M_S),
+	    M_XYZ_RGB = matrix.inverse(M_RGB_XYZ);
 
 	return {
 		fromRgb (RGB) {

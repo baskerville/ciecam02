@@ -1,8 +1,8 @@
 var illuminant = require("./illuminant"),
-	matrix = require("./matrix"),
-	merge = require("mout/object/merge"),
-	{degree, radian} = require("./helpers"),
-	{pow, sqrt, exp, abs, sign} = Math,
+    matrix = require("./matrix"),
+    merge = require("mout/object/merge"),
+    {degree, radian} = require("./helpers"),
+    {pow, sqrt, exp, abs, sign} = Math,
     {floor, sin, cos, atan2} = Math;
 
 var surrounds = {
@@ -42,41 +42,41 @@ function Converter (viewingConditions={}) {
 	    L_A = viewingConditions.adaptingLuminance,
 	    Y_b = viewingConditions.backgroundLuminance,
 	    {F, c, N_c} = surrounds[viewingConditions.surroundType],
-		Y_w = XYZ_w[1];
+	    Y_w = XYZ_w[1];
 
 	var k = 1 / (5*L_A + 1),
-		F_L = 0.2 * pow(k, 4) * 5 * L_A + 0.1 * pow(1 - pow(k, 4), 2) * pow(5 * L_A, 1/3),
-		n = Y_b / Y_w,
-		N_bb = 0.725 * pow(1/n, 0.2),
-		N_cb = N_bb,
-		z = 1.48 + sqrt(n),
-		D = viewingConditions.discounting ? 1 : F * (1 - 1 / 3.6 * exp(-(L_A + 42) / 92));
+	    F_L = 0.2 * pow(k, 4) * 5 * L_A + 0.1 * pow(1 - pow(k, 4), 2) * pow(5 * L_A, 1/3),
+	    n = Y_b / Y_w,
+	    N_bb = 0.725 * pow(1/n, 0.2),
+	    N_cb = N_bb,
+	    z = 1.48 + sqrt(n),
+	    D = viewingConditions.discounting ? 1 : F * (1 - 1 / 3.6 * exp(-(L_A + 42) / 92));
 
 	var RGB_w = matrix.multiply(M_CAT02, XYZ_w),
 	    [D_R, D_G, D_B] = RGB_w.map(v => D * Y_w / v + 1 - D),
-        RGB_cw = correspondingColors(XYZ_w),
-        RGB_aw = adaptedResponses(RGB_cw),
-        A_w = achromaticResponse(RGB_aw);
+	    RGB_cw = correspondingColors(XYZ_w),
+	    RGB_aw = adaptedResponses(RGB_cw),
+	    A_w = achromaticResponse(RGB_aw);
 
-    function correspondingColors (XYZ) { 
-        var [R, G, B] = matrix.multiply(XYZ_to_CAT02, XYZ);
-        return [D_R*R, D_G*G, D_B*B];
+	function correspondingColors (XYZ) {
+		var [R, G, B] = matrix.multiply(XYZ_to_CAT02, XYZ);
+		return [D_R*R, D_G*G, D_B*B];
 	}
 
-    function reverseCorrespondingColors (RGB_c) { 
-    	var [R_c, G_c, B_c] = RGB_c;
-        return matrix.multiply(CAT02_to_XYZ, [R_c/D_R, G_c/D_G, B_c/D_B]);
+	function reverseCorrespondingColors (RGB_c) {
+		var [R_c, G_c, B_c] = RGB_c;
+		return matrix.multiply(CAT02_to_XYZ, [R_c/D_R, G_c/D_G, B_c/D_B]);
 	}
 
-    function adaptedResponses (RGB_c) { 
-        return matrix.multiply(CAT02_to_HPE, RGB_c).map(function (v) {
+	function adaptedResponses (RGB_c) {
+		return matrix.multiply(CAT02_to_HPE, RGB_c).map(function (v) {
 			var x = pow(F_L * abs(v) / 100, 0.42);
 			return sign(v) * 400 * x / (27.13 + x) + 0.1;
 		});
 	}
 
-    function reverseAdaptedResponses (RGB_a) { 
-        return matrix.multiply(HPE_to_CAT02, RGB_a.map(function (v) {
+	function reverseAdaptedResponses (RGB_a) {
+		return matrix.multiply(HPE_to_CAT02, RGB_a.map(function (v) {
 			var x = v - 0.1;
 			return sign(x) * 100 / F_L * pow(27.13 * abs(x) / (400 - abs(x)), 1/0.42);
 		}));
@@ -147,9 +147,9 @@ function Converter (viewingConditions={}) {
 		}
 
 		var RGB_a = [
-		     20/61 * p_2 + 451/1403 * a +  288/1403 * b,
-		     20/61 * p_2 - 891/1403 * a -  261/1403 * b,
-		     20/61 * p_2 - 220/1403 * a - 6300/1403 * b
+			20/61 * p_2 + 451/1403 * a +  288/1403 * b,
+			20/61 * p_2 - 891/1403 * a -  261/1403 * b,
+			20/61 * p_2 - 220/1403 * a - 6300/1403 * b
 		];
 
 		var RGB_c = reverseAdaptedResponses(RGB_a),

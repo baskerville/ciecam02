@@ -1,5 +1,5 @@
 var {degree, radian} = require("./helpers"),
-	{sqrt, pow, exp, log, cos, sin, atan2} = Math;
+    {sqrt, pow, exp, log, cos, sin, atan2} = Math;
 
 var uniformSpaces = {
 	LCD: {K_L: 0.77, c_1: 0.007, c_2: 0.0053},
@@ -22,11 +22,11 @@ function Converter (name="UCS") {
 
 	function fromUniform (correlates) {
 		var {J_p, a_p, b_p} = correlates,
-			J = -J_p / (c_1 * J_p - 100 * c_1 - 1),
-			M_p = sqrt(pow(a_p, 2) + pow(b_p, 2)),
-			M = (exp(c_2 * M_p) - 1) / c_2,
-			h_rad = atan2(b_p, a_p),
-			h = degree(h_rad);
+		    J = -J_p / (c_1 * J_p - 100 * c_1 - 1),
+		    M_p = sqrt(pow(a_p, 2) + pow(b_p, 2)),
+		    M = (exp(c_2 * M_p) - 1) / c_2,
+		    h_rad = atan2(b_p, a_p),
+		    h = degree(h_rad);
 		return {J: J, M: M, h: h};
 	}
 

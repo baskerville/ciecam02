@@ -12,8 +12,8 @@ var coordinates = {
 
 var illuminants = map(coordinates, function (v) {
 	var X = 100 * (v.x / v.y),
-		Y = 100,
-		Z = 100 * (1 - v.x - v.y) / v.y;
+	    Y = 100,
+	    Z = 100 * (1 - v.x - v.y) / v.y;
 	return [X, Y, Z];
 });
 
