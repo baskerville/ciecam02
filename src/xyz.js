@@ -1,7 +1,7 @@
 var matrix = require("./matrix"),
-	illuminant = require("./illuminant"),
-	rgb = require("./rgb"),
-	{round} = Math;
+    illuminant = require("./illuminant"),
+    rgb = require("./rgb"),
+    {round} = Math;
 
 // http://www.brucelindbloom.com/Eqn_RGB_XYZ_Matrix.html
 function Converter (rgbSpace=rgb.sRGB, whitePoint=illuminant.D65) {

@@ -82,9 +82,9 @@ function Converter (viewingConditions={}) {
 		}));
 	}
 
-    function achromaticResponse (RGB_a) {
-    	var [R_a, G_a, B_a] = RGB_a;
-        return (R_a * 2 + G_a + B_a / 20 - 0.305) * N_bb;
+	function achromaticResponse (RGB_a) {
+		var [R_a, G_a, B_a] = RGB_a;
+		return (R_a * 2 + G_a + B_a / 20 - 0.305) * N_bb;
 	}
 
 	function forwardModel (XYZ) {
