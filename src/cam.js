@@ -106,7 +106,6 @@ function Converter (viewingConditions={}) {
 		    M = C * pow(F_L, 0.25),
 		    s = 100 * sqrt(M / Q);
 
-		// TODO: compute H
 		return {Q: Q, J: J, M: M, C: C, s: s, h: h, H: H};
 	}
 
