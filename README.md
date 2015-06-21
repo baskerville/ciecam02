@@ -6,15 +6,15 @@ Converters:
 		fromHex(hex) -> RGB,
 		toHex(RGB) -> hex
 	}
-	xyz([rgbSpace=workspace.sRGB], [whitePoint=illuminant.D65]) -> {
+	xyz(rgbSpace?=workspace.sRGB, whitePoint?=illuminant.D65) -> {
 		fromRgb(RGB) -> XYZ,
 		toRgb(XYZ) -> RGB,
 	},
-	cam([viewingConditions]) -> {
+	cam(viewingConditions?) -> {
 		fromXyz(XYZ) -> CAM,
 		toXyz(CAM) -> XYZ
 	},
-	ucs([name="UCS"]) -> {
+	ucs(name?="UCS") -> {
 		fromCam(CAM) -> UCS,
 		toCam(UCS) -> CAM,
 		distance(UCS1, UCS2) -> number
