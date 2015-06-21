@@ -152,14 +152,14 @@ function Converter() {
 		return { Q: Q, J: J, M: M, C: C, s: s, h: h, H: H };
 	}
 
-	function toXyz(correlates) {
-		var Q = correlates.Q;
-		var J = correlates.J;
-		var M = correlates.M;
-		var C = correlates.C;
-		var s = correlates.s;
-		var h = correlates.h;
-		var H = correlates.H;
+	function toXyz(CAM) {
+		var Q = CAM.Q;
+		var J = CAM.J;
+		var M = CAM.M;
+		var C = CAM.C;
+		var s = CAM.s;
+		var h = CAM.h;
+		var H = CAM.H;
 		var h_rad = radian(h);
 
 		J = isNaN(J) ? 6.25 * pow(c * Q / ((A_w + 4) * pow(F_L, 0.25)), 2) : J;

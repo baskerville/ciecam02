@@ -109,8 +109,8 @@ function Converter (viewingConditions={}) {
 		return {Q: Q, J: J, M: M, C: C, s: s, h: h, H: H};
 	}
 
-	function toXyz (correlates) {
-		var {Q, J, M, C, s, h, H} = correlates,
+	function toXyz (CAM) {
+		var {Q, J, M, C, s, h, H} = CAM,
 		    h_rad = radian(h);
 
 		J = isNaN(J) ? 6.25 * pow(c * Q / ((A_w + 4) * pow(F_L, 0.25)), 2) : J;

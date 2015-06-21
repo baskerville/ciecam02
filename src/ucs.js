@@ -10,8 +10,8 @@ var uniformSpaces = {
 function Converter (name="UCS") {
 	var {K_L, c_1, c_2} = uniformSpaces[name];
 
-	function fromCorrelates (correlates) {
-		var {J, M, h} = correlates,
+	function fromCam (CAM) {
+		var {J, M, h} = CAM,
 		    h_rad = radian(h),
 		    J_p = (1 + 100 * c_1) * J / (1 + c_1 * J),
 		    M_p = (1 / c_2) * log(1 + c_2 * M),
@@ -20,8 +20,8 @@ function Converter (name="UCS") {
 		return {J_p: J_p, a_p: a_p, b_p: b_p};
 	}
 
-	function toCorrelates (unif) {
-		var {J_p, a_p, b_p} = unif,
+	function toCam (UCS) {
+		var {J_p, a_p, b_p} = UCS,
 		    J = -J_p / (c_1 * J_p - 100 * c_1 - 1),
 		    M_p = sqrt(pow(a_p, 2) + pow(b_p, 2)),
 		    M = (exp(c_2 * M_p) - 1) / c_2,
@@ -30,13 +30,13 @@ function Converter (name="UCS") {
 		return {J: J, M: M, h: h};
 	}
 
-	function distance (u1, u2) {
-		return sqrt(pow((u1.J_p - u2.J_p)/K_L, 2) + pow(u1.a_p - u2.a_p, 2) + pow(u1.b_p - u2.b_p, 2));
+	function distance (UCS1, UCS2) {
+		return sqrt(pow((UCS1.J_p - UCS2.J_p)/K_L, 2) + pow(UCS1.a_p - UCS2.a_p, 2) + pow(UCS1.b_p - UCS2.b_p, 2));
 	}
 
 	return {
-		fromCorrelates: fromCorrelates,
-		toCorrelates: toCorrelates,
+		fromCam: fromCam,
+		toCam: toCam,
 		distance: distance
 	};
 }

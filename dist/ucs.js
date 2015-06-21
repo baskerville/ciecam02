@@ -25,10 +25,10 @@ function Converter() {
 	var c_1 = _uniformSpaces$name.c_1;
 	var c_2 = _uniformSpaces$name.c_2;
 
-	function fromCorrelates(correlates) {
-		var J = correlates.J;
-		var M = correlates.M;
-		var h = correlates.h;
+	function fromCam(CAM) {
+		var J = CAM.J;
+		var M = CAM.M;
+		var h = CAM.h;
 		var h_rad = radian(h);
 		var J_p = (1 + 100 * c_1) * J / (1 + c_1 * J);
 		var M_p = 1 / c_2 * log(1 + c_2 * M);
@@ -37,10 +37,10 @@ function Converter() {
 		return { J_p: J_p, a_p: a_p, b_p: b_p };
 	}
 
-	function toCorrelates(unif) {
-		var J_p = unif.J_p;
-		var a_p = unif.a_p;
-		var b_p = unif.b_p;
+	function toCam(UCS) {
+		var J_p = UCS.J_p;
+		var a_p = UCS.a_p;
+		var b_p = UCS.b_p;
 		var J = -J_p / (c_1 * J_p - 100 * c_1 - 1);
 		var M_p = sqrt(pow(a_p, 2) + pow(b_p, 2));
 		var M = (exp(c_2 * M_p) - 1) / c_2;
@@ -49,13 +49,13 @@ function Converter() {
 		return { J: J, M: M, h: h };
 	}
 
-	function distance(u1, u2) {
-		return sqrt(pow((u1.J_p - u2.J_p) / K_L, 2) + pow(u1.a_p - u2.a_p, 2) + pow(u1.b_p - u2.b_p, 2));
+	function distance(UCS1, UCS2) {
+		return sqrt(pow((UCS1.J_p - UCS2.J_p) / K_L, 2) + pow(UCS1.a_p - UCS2.a_p, 2) + pow(UCS1.b_p - UCS2.b_p, 2));
 	}
 
 	return {
-		fromCorrelates: fromCorrelates,
-		toCorrelates: toCorrelates,
+		fromCam: fromCam,
+		toCam: toCam,
 		distance: distance
 	};
 }

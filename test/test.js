@@ -10,22 +10,30 @@ describe("Roundtrips", function () {
 	    cc = CamConv(),
 	    uc = UcsConv(),
 	    hex = "#e73e01",
-	    XYZ = xc.fromRgb(rc.fromHex(hex)),
-	    correlates = cc.fromXyz(XYZ);
+	    RGB = rc.fromHex(hex),
+	    XYZ = xc.fromRgb(RGB),
+	    CAM = cc.fromXyz(XYZ),
+	    UCS = uc.fromCam(CAM);
+	it("Rgb", function () {
+		assert.equal(hex, rc.toHex(RGB));
+	});
 	it("Xyz", function () {
-		assert.equal(hex, rc.toHex(xc.toRgb(XYZ)));
+		var rRGB = xc.toRgb(XYZ);
+		assert.closeTo(RGB[0], rRGB[0], ε);
+		assert.closeTo(RGB[1], rRGB[1], ε);
+		assert.closeTo(RGB[2], rRGB[2], ε);
 	});
 	it("Cam", function () {
-		var rXYZ = cc.toXyz(correlates);
+		var rXYZ = cc.toXyz(CAM);
 		assert.closeTo(XYZ[0], rXYZ[0], ε);
 		assert.closeTo(XYZ[1], rXYZ[1], ε);
 		assert.closeTo(XYZ[2], rXYZ[2], ε);
 	});
 	it("Ucs", function () {
-		var rCorrelates = uc.toCorrelates(uc.fromCorrelates(correlates));
-		assert.closeTo(correlates.J, rCorrelates.J, ε);
-		assert.closeTo(correlates.M, rCorrelates.M, ε);
-		assert.closeTo(correlates.h, rCorrelates.h, ε);
+		var rCAM = uc.toCam(UCS);
+		assert.closeTo(CAM.J, rCAM.J, ε);
+		assert.closeTo(CAM.M, rCAM.M, ε);
+		assert.closeTo(CAM.h, rCAM.h, ε);
 	});
 });
 
@@ -39,14 +47,14 @@ describe("Fairchild examples", function () {
 			surroundType: "average",
 			discounting: false
 		});
-		var correlates = cc.fromXyz([19.01, 20.00, 21.78]);
-		assert.closeTo(correlates.Q, 195.35, ε);
-		assert.closeTo(correlates.J, 41.73, ε);
-		assert.closeTo(correlates.M, 0.11, ε);
-		assert.closeTo(correlates.C, 0.10, ε);
-		assert.closeTo(correlates.s, 2.36, ε);
-		assert.closeTo(correlates.h, 219.0, ε);
-		assert.closeTo(correlates.H, 278.1, ε);
+		var CAM = cc.fromXyz([19.01, 20.00, 21.78]);
+		assert.closeTo(CAM.Q, 195.35, ε);
+		assert.closeTo(CAM.J, 41.73, ε);
+		assert.closeTo(CAM.M, 0.11, ε);
+		assert.closeTo(CAM.C, 0.10, ε);
+		assert.closeTo(CAM.s, 2.36, ε);
+		assert.closeTo(CAM.h, 219.0, ε);
+		assert.closeTo(CAM.H, 278.1, ε);
 	});
 	it("Case 2", function () {
 		var cc = CamConv({
@@ -56,15 +64,15 @@ describe("Fairchild examples", function () {
 			surroundType: "average",
 			discounting: false
 		});
-		var correlates = cc.fromXyz([57.06, 43.06, 31.96]);
-		assert.closeTo(correlates.Q, 152.67, ε);
-		assert.closeTo(correlates.J, 65.96, ε);
-		assert.closeTo(correlates.M, 41.67, ε);
-		assert.closeTo(correlates.C, 48.57, ε);
-		assert.closeTo(correlates.s, 52.25, ε);
-		assert.closeTo(correlates.h, 19.6, ε);
+		var CAM = cc.fromXyz([57.06, 43.06, 31.96]);
+		assert.closeTo(CAM.Q, 152.67, ε);
+		assert.closeTo(CAM.J, 65.96, ε);
+		assert.closeTo(CAM.M, 41.67, ε);
+		assert.closeTo(CAM.C, 48.57, ε);
+		assert.closeTo(CAM.s, 52.25, ε);
+		assert.closeTo(CAM.h, 19.6, ε);
 		// Fairchild gives an incorrect value of 393.9
-		assert.closeTo(correlates.H, 399.4, ε);
+		assert.closeTo(CAM.H, 399.4, ε);
 	});
 	it("Case 3", function () {
 		var cc = CamConv({
@@ -74,14 +82,14 @@ describe("Fairchild examples", function () {
 			surroundType: "average",
 			discounting: false
 		});
-		var correlates = cc.fromXyz([3.53, 6.56, 2.14]);
-		assert.closeTo(correlates.Q, 141.17, ε);
-		assert.closeTo(correlates.J, 21.79, ε);
-		assert.closeTo(correlates.M, 48.80, ε);
-		assert.closeTo(correlates.C, 46.94, ε);
-		assert.closeTo(correlates.s, 58.79, ε);
-		assert.closeTo(correlates.h, 177.1, ε);
-		assert.closeTo(correlates.H, 220.4, ε);
+		var CAM = cc.fromXyz([3.53, 6.56, 2.14]);
+		assert.closeTo(CAM.Q, 141.17, ε);
+		assert.closeTo(CAM.J, 21.79, ε);
+		assert.closeTo(CAM.M, 48.80, ε);
+		assert.closeTo(CAM.C, 46.94, ε);
+		assert.closeTo(CAM.s, 58.79, ε);
+		assert.closeTo(CAM.h, 177.1, ε);
+		assert.closeTo(CAM.H, 220.4, ε);
 	});
 	it("Case 4", function () {
 		var cc = CamConv({
@@ -91,14 +99,14 @@ describe("Fairchild examples", function () {
 			surroundType: "average",
 			discounting: false
 		});
-		var correlates = cc.fromXyz([19.01, 20.00, 21.78]);
-		assert.closeTo(correlates.Q, 122.83, ε);
-		assert.closeTo(correlates.J, 42.53, ε);
-		assert.closeTo(correlates.M, 44.54, ε);
-		assert.closeTo(correlates.C, 51.92, ε);
-		assert.closeTo(correlates.s, 60.22, ε);
-		assert.closeTo(correlates.h, 248.9, ε);
+		var CAM = cc.fromXyz([19.01, 20.00, 21.78]);
+		assert.closeTo(CAM.Q, 122.83, ε);
+		assert.closeTo(CAM.J, 42.53, ε);
+		assert.closeTo(CAM.M, 44.54, ε);
+		assert.closeTo(CAM.C, 51.92, ε);
+		assert.closeTo(CAM.s, 60.22, ε);
+		assert.closeTo(CAM.h, 248.9, ε);
 		// Fairchild gives an incorrect value of 305.8
-		assert.closeTo(correlates.H, 305.5, ε);
+		assert.closeTo(CAM.H, 305.5, ε);
 	});
 });

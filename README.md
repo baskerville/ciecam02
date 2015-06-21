@@ -11,13 +11,13 @@ Converters:
 		toRgb(XYZ) -> RGB,
 	},
 	cam([viewingConditions]) -> {
-		fromXyz(XYZ) -> correlates,
-		toXyz(correlates) -> XYZ
+		fromXyz(XYZ) -> CAM,
+		toXyz(CAM) -> XYZ
 	},
 	ucs([name="UCS"]) -> {
-		fromCorrelates(correlates) -> unif,
-		toCorrelates(unif) -> correlates,
-		distance(unif1, unif2) -> number
+		fromCam(CAM) -> UCS,
+		toCam(UCS) -> CAM,
+		distance(UCS1, UCS2) -> number
 	}
 
 Default viewing conditions:
