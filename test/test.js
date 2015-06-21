@@ -11,18 +11,18 @@ describe("Roundtrips", function () {
 	    uc = UcsConv(),
 	    hex = "#e73e01",
 	    XYZ = xc.fromRgb(rc.fromHex(hex)),
-	    correlates = cc.forwardModel(XYZ);
+	    correlates = cc.fromXyz(XYZ);
 	it("Xyz", function () {
 		assert.equal(hex, rc.toHex(xc.toRgb(XYZ)));
 	});
 	it("Cam", function () {
-		var rXYZ = cc.reverseModel(correlates);
+		var rXYZ = cc.toXyz(correlates);
 		assert.closeTo(XYZ[0], rXYZ[0], ε);
 		assert.closeTo(XYZ[1], rXYZ[1], ε);
 		assert.closeTo(XYZ[2], rXYZ[2], ε);
 	});
 	it("Ucs", function () {
-		var rCorrelates = uc.fromUniform(uc.toUniform(correlates));
+		var rCorrelates = uc.toCorrelates(uc.fromCorrelates(correlates));
 		assert.closeTo(correlates.J, rCorrelates.J, ε);
 		assert.closeTo(correlates.M, rCorrelates.M, ε);
 		assert.closeTo(correlates.h, rCorrelates.h, ε);
@@ -39,7 +39,7 @@ describe("Fairchild examples", function () {
 			surroundType: "average",
 			discounting: false
 		});
-		var correlates = cc.forwardModel([19.01, 20.00, 21.78]);
+		var correlates = cc.fromXyz([19.01, 20.00, 21.78]);
 		assert.closeTo(correlates.Q, 195.35, ε);
 		assert.closeTo(correlates.J, 41.73, ε);
 		assert.closeTo(correlates.M, 0.11, ε);
@@ -56,7 +56,7 @@ describe("Fairchild examples", function () {
 			surroundType: "average",
 			discounting: false
 		});
-		var correlates = cc.forwardModel([57.06, 43.06, 31.96]);
+		var correlates = cc.fromXyz([57.06, 43.06, 31.96]);
 		assert.closeTo(correlates.Q, 152.67, ε);
 		assert.closeTo(correlates.J, 65.96, ε);
 		assert.closeTo(correlates.M, 41.67, ε);
@@ -74,7 +74,7 @@ describe("Fairchild examples", function () {
 			surroundType: "average",
 			discounting: false
 		});
-		var correlates = cc.forwardModel([3.53, 6.56, 2.14]);
+		var correlates = cc.fromXyz([3.53, 6.56, 2.14]);
 		assert.closeTo(correlates.Q, 141.17, ε);
 		assert.closeTo(correlates.J, 21.79, ε);
 		assert.closeTo(correlates.M, 48.80, ε);
@@ -91,7 +91,7 @@ describe("Fairchild examples", function () {
 			surroundType: "average",
 			discounting: false
 		});
-		var correlates = cc.forwardModel([19.01, 20.00, 21.78]);
+		var correlates = cc.fromXyz([19.01, 20.00, 21.78]);
 		assert.closeTo(correlates.Q, 122.83, ε);
 		assert.closeTo(correlates.J, 42.53, ε);
 		assert.closeTo(correlates.M, 44.54, ε);

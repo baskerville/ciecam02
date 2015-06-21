@@ -25,7 +25,7 @@ function Converter() {
 	var c_1 = _uniformSpaces$name.c_1;
 	var c_2 = _uniformSpaces$name.c_2;
 
-	function toUniform(correlates) {
+	function fromCorrelates(correlates) {
 		var J = correlates.J;
 		var M = correlates.M;
 		var h = correlates.h;
@@ -37,10 +37,10 @@ function Converter() {
 		return { J_p: J_p, a_p: a_p, b_p: b_p };
 	}
 
-	function fromUniform(correlates) {
-		var J_p = correlates.J_p;
-		var a_p = correlates.a_p;
-		var b_p = correlates.b_p;
+	function toCorrelates(unif) {
+		var J_p = unif.J_p;
+		var a_p = unif.a_p;
+		var b_p = unif.b_p;
 		var J = -J_p / (c_1 * J_p - 100 * c_1 - 1);
 		var M_p = sqrt(pow(a_p, 2) + pow(b_p, 2));
 		var M = (exp(c_2 * M_p) - 1) / c_2;
@@ -54,8 +54,8 @@ function Converter() {
 	}
 
 	return {
-		toUniform: toUniform,
-		fromUniform: fromUniform,
+		fromCorrelates: fromCorrelates,
+		toCorrelates: toCorrelates,
 		distance: distance
 	};
 }

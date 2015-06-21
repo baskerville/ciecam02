@@ -11,12 +11,12 @@ Converters:
 		toRgb(XYZ) -> RGB,
 	},
 	cam([viewingConditions]) -> {
-		forwardModel(XYZ) -> correlates,
-		reverseModel(correlates) -> XYZ
+		fromXyz(XYZ) -> correlates,
+		toXyz(correlates) -> XYZ
 	},
 	ucs([name="UCS"]) -> {
-		toUniform(correlates) -> unif,
-		fromUniform(unif) -> correlates,
+		fromCorrelates(correlates) -> unif,
+		toCorrelates(unif) -> correlates,
 		distance(unif1, unif2) -> number
 	}
 

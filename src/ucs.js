@@ -10,7 +10,7 @@ var uniformSpaces = {
 function Converter (name="UCS") {
 	var {K_L, c_1, c_2} = uniformSpaces[name];
 
-	function toUniform (correlates) {
+	function fromCorrelates (correlates) {
 		var {J, M, h} = correlates,
 		    h_rad = radian(h),
 		    J_p = (1 + 100 * c_1) * J / (1 + c_1 * J),
@@ -20,8 +20,8 @@ function Converter (name="UCS") {
 		return {J_p: J_p, a_p: a_p, b_p: b_p};
 	}
 
-	function fromUniform (correlates) {
-		var {J_p, a_p, b_p} = correlates,
+	function toCorrelates (unif) {
+		var {J_p, a_p, b_p} = unif,
 		    J = -J_p / (c_1 * J_p - 100 * c_1 - 1),
 		    M_p = sqrt(pow(a_p, 2) + pow(b_p, 2)),
 		    M = (exp(c_2 * M_p) - 1) / c_2,
@@ -35,8 +35,8 @@ function Converter (name="UCS") {
 	}
 
 	return {
-		toUniform: toUniform,
-		fromUniform: fromUniform,
+		fromCorrelates: fromCorrelates,
+		toCorrelates: toCorrelates,
 		distance: distance
 	};
 }

@@ -87,7 +87,7 @@ function Converter (viewingConditions={}) {
 		return (R_a * 2 + G_a + B_a / 20 - 0.305) * N_bb;
 	}
 
-	function forwardModel (XYZ) {
+	function fromXyz (XYZ) {
 		var RGB_c = correspondingColors(XYZ),
 		    RGB_a = adaptedResponses(RGB_c),
 		    [R_a, G_a, B_a] = RGB_a;
@@ -109,7 +109,7 @@ function Converter (viewingConditions={}) {
 		return {Q: Q, J: J, M: M, C: C, s: s, h: h, H: H};
 	}
 
-	function reverseModel (correlates) {
+	function toXyz (correlates) {
 		var {Q, J, M, C, s, h, H} = correlates,
 		    h_rad = radian(h);
 
@@ -159,8 +159,8 @@ function Converter (viewingConditions={}) {
 	}
 
 	return {
-		forwardModel: forwardModel,
-		reverseModel: reverseModel
+		fromXyz: fromXyz,
+		toXyz: toXyz
 	};
 }
 
