@@ -1,46 +1,24 @@
 "use strict";
 
-var pow = Math.pow;
+var round = Math.round;
 
-var sRGBGamma = {
-	decode: function decode(v) {
-		return v <= 0.04045 ? v / 12.92 : pow((v + 0.055) / 1.055, 2.4);
-	},
-	encode: function encode(v) {
-		return v <= 0.0031308 ? 12.92 * v : 1.055 * pow(v, 1 / 2.4) - 0.055;
-	}
-};
-
-function simpleGamma(g) {
-	return {
-		decode: function decode(v) {
-			return pow(v, g);
-		},
-		encode: function encode(v) {
-			return pow(v, 1 / g);
+module.exports = {
+	fromHex: function fromHex(hex) {
+		if (hex[0] == "#") {
+			hex = hex.slice(1);
 		}
-	};
-}
-
-var spaces = {
-	"sRGB": {
-		r: { x: 0.64, y: 0.33 },
-		g: { x: 0.3, y: 0.6 },
-		b: { x: 0.15, y: 0.06 },
-		gamma: sRGBGamma
+		return hex.match(/../g).map(function (v) {
+			return parseInt(v, 16) / 255;
+		});
 	},
-	"Adobe RGB": {
-		r: { x: 0.64, y: 0.33 },
-		g: { x: 0.21, y: 0.71 },
-		b: { x: 0.15, y: 0.06 },
-		gamma: simpleGamma(2.2)
-	},
-	"Wide Gamut RGB": {
-		r: { x: 0.7347, y: 0.2653 },
-		g: { x: 0.1152, y: 0.8264 },
-		b: { x: 0.1566, y: 0.0177 },
-		gamma: simpleGamma(563 / 256)
+	toHex: function toHex(RGB) {
+		var hex = RGB.map(function (v) {
+			v = round(255 * v).toString(16);
+			if (v.length < 2) {
+				v = "0" + v;
+			}
+			return v;
+		}).join("");
+		return "#" + hex;
 	}
 };
-
-module.exports = spaces;

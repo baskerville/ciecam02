@@ -1,4 +1,5 @@
 var illuminant = require("./dist/illuminant"),
+    workspace = require("./dist/workspace"),
     rgb = require("./dist/rgb"),
     xyz = require("./dist/xyz"),
     cam = require("./dist/cam"),
@@ -6,6 +7,7 @@ var illuminant = require("./dist/illuminant"),
 
 module.exports = {
 	illuminant: illuminant,
+	workspace: workspace,
 	rgb: rgb,
 	xyz: xyz,
 	cam: cam,

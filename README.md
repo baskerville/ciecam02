@@ -2,11 +2,13 @@
 
 Converters:
 
-	xyz([rgbSpace=rgb.sRGB], [whitePoint=illuminant.D65]) -> {
+	rgb: {
+		fromHex(hex) -> RGB,
+		toHex(RGB) -> hex
+	}
+	xyz([rgbSpace=workspace.sRGB], [whitePoint=illuminant.D65]) -> {
 		fromRgb(RGB) -> XYZ,
 		toRgb(XYZ) -> RGB,
-		fromHex(hex) -> XYZ,
-		toHex(XYZ) -> hex
 	},
 	cam([viewingConditions]) -> {
 		forwardModel(XYZ) -> correlates,

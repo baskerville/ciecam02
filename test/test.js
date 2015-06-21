@@ -5,14 +5,15 @@ var CamConv = require("../dist/cam"),
     ε = 0.05;
 
 describe("Roundtrips", function () {
-	var xc = XyzConv(),
+	var rc = require("../dist/rgb"),
+	    xc = XyzConv(),
 	    cc = CamConv(),
 	    uc = UcsConv(),
 	    hex = "#e73e01",
-	    XYZ = xc.fromHex(hex),
+	    XYZ = xc.fromRgb(rc.fromHex(hex)),
 	    correlates = cc.forwardModel(XYZ);
 	it("Xyz", function () {
-		assert.equal(hex, xc.toHex(XYZ));
+		assert.equal(hex, rc.toHex(xc.toRgb(XYZ)));
 	});
 	it("Cam", function () {
 		var rXYZ = cc.reverseModel(correlates);

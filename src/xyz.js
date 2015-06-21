@@ -1,10 +1,9 @@
 var matrix = require("./matrix"),
     illuminant = require("./illuminant"),
-    rgb = require("./rgb"),
-    {round} = Math;
+    workspace = require("./workspace");
 
 // http://www.brucelindbloom.com/Eqn_RGB_XYZ_Matrix.html
-function Converter (rgbSpace=rgb.sRGB, whitePoint=illuminant.D65) {
+function Converter (rgbSpace=workspace.sRGB, whitePoint=illuminant.D65) {
 	var primaries = [rgbSpace.r, rgbSpace.g, rgbSpace.b];
 
 	var M_P = matrix.transpose(primaries.map(function (v) {
@@ -26,23 +25,6 @@ function Converter (rgbSpace=rgb.sRGB, whitePoint=illuminant.D65) {
 		toRgb (XYZ) {
 			return matrix.multiply(M_XYZ_RGB, XYZ).map(gamma.encode);
 		},
-		fromHex (hex) {
-			if (hex[0] == "#") {
-				hex = hex.slice(1);
-			}
-			var RGB = hex.match(/../g).map(v => parseInt(v, 16)/255);
-			return this.fromRgb(RGB);
-		},
-		toHex (XYZ) {
-			var hex = this.toRgb(XYZ).map(function (v) {
-				v = round(255*v).toString(16);
-				if (v.length < 2) {
-					v = "0" + v;
-				}
-				return v;
-			}).join("");
-			return "#" + hex;
-		}
 	};
 }
 
