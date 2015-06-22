@@ -168,6 +168,12 @@ function Converter() {
 		}
 		if (correlates.s) {
 			CAM.s = 100 * sqrt(CAM.M / CAM.Q);
+			if (!correlates.M) {
+				delete CAM.M;
+			}
+			if (!correlates.Q) {
+				delete CAM.Q;
+			}
 		}
 		if (correlates.H) {
 			CAM.H = hq.fromHue(h);
@@ -205,7 +211,7 @@ function Converter() {
 
 		var a, b;
 
-		if (t === 0) {
+		if (t === 0 || isNaN(t)) {
 			a = b = 0;
 		} else if (abs(sin_h) >= abs(cos_h)) {
 			b = q_1 / (p_1 / sin_h + q_2 * cos_h / sin_h + q_3);
@@ -238,6 +244,12 @@ function Converter() {
 		}
 		if (correlates.s) {
 			CAM.s = isNaN(s) ? 100 * sqrt(CAM.M / CAM.Q) : s;
+			if (!correlates.M) {
+				delete CAM.M;
+			}
+			if (!correlates.Q) {
+				delete CAM.Q;
+			}
 		}
 		if (correlates.H) {
 			CAM.H = isNaN(H) ? hq.fromHue(h) : H;
