@@ -6,6 +6,7 @@ var CamConv = require("../dist/cam"),
 
 describe("Roundtrips", function () {
 	var rc = require("../dist/rgb"),
+	    hc = require("../dist/hq"),
 	    xc = XyzConv(),
 	    cc = CamConv(),
 	    uc = UcsConv(),
@@ -34,6 +35,10 @@ describe("Roundtrips", function () {
 		assert.closeTo(CAM.J, rCAM.J, ε);
 		assert.closeTo(CAM.M, rCAM.M, ε);
 		assert.closeTo(CAM.h, rCAM.h, ε);
+	});
+	it("Hq", function () {
+		var h = 237;
+		assert.closeTo(h, hc.toHue(hc.fromHue(h)), ε);
 	});
 });
 

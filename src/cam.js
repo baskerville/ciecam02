@@ -1,9 +1,10 @@
 var illuminant = require("./illuminant"),
     matrix = require("./matrix"),
+    hq = require("./hq"),
     merge = require("mout/object/merge"),
-    {degree, radian} = require("./helpers"),
+    {degree, radian, asObject} = require("./helpers"),
     {pow, sqrt, exp, abs, sign} = Math,
-    {floor, sin, cos, atan2} = Math;
+    {sin, cos, atan2} = Math;
 
 var surrounds = {
 	average: {F: 1.0, c: 0.69, N_c: 1.0},
@@ -29,7 +30,7 @@ var XYZ_to_CAT02 = M_CAT02,
     HPE_to_CAT02 = matrix.product(M_CAT02, matrix.inverse(M_HPE));
 
 // CIECAM02 and Its Recent Developments - Ming Ronnier Luo and Changjun Li
-function Converter (viewingConditions={}) {
+function Converter (viewingConditions={}, correlates="QJMCshH") {
 	viewingConditions = merge({
 		whitePoint: illuminant.D65,
 		adaptingLuminance: 40,
@@ -37,6 +38,8 @@ function Converter (viewingConditions={}) {
 		surroundType: "average",
 		discounting: false
 	}, viewingConditions);
+
+	correlates = asObject(correlates.split(""));
 
 	var XYZ_w = viewingConditions.whitePoint,
 	    L_A = viewingConditions.adaptingLuminance,
@@ -96,17 +99,37 @@ function Converter (viewingConditions={}) {
 		    b = (R_a + G_a - 2 * B_a) / 9,
 		    h_rad = atan2(b, a),
 		    h = degree(h_rad),
-		    H = hueQuadrature(h),
 		    e_t = 1/4 * (cos(h_rad + 2) + 3.8),
 		    A = achromaticResponse(RGB_a),
 		    J = 100 * pow(A / A_w, c * z),
 		    t = (5e4 / 13 * N_c * N_cb * e_t * sqrt(a*a + b*b) / (R_a + G_a + 21 / 20 * B_a)),
-		    C = pow(t, 0.9) * sqrt(J / 100) * pow(1.64 - pow(0.29, n), 0.73),
-		    Q = 4 / c * sqrt(J / 100) * (A_w + 4) * pow(F_L, 0.25),
-		    M = C * pow(F_L, 0.25),
-		    s = 100 * sqrt(M / Q);
+		    C = pow(t, 0.9) * sqrt(J / 100) * pow(1.64 - pow(0.29, n), 0.73);
 
-		return {Q: Q, J: J, M: M, C: C, s: s, h: h, H: H};
+		var CAM = {};
+
+		if (correlates.J) {
+			CAM.J = J;
+		}
+		if (correlates.C) {
+			CAM.C = C;
+		}
+		if (correlates.h) {
+			CAM.h = h;
+		}
+		if (correlates.Q || correlates.s) {
+		    CAM.Q = 4 / c * sqrt(J / 100) * (A_w + 4) * pow(F_L, 0.25);
+		}
+		if (correlates.M || correlates.s) {
+		    CAM.M = C * pow(F_L, 0.25);
+		}
+		if (correlates.s) {
+		    CAM.s = 100 * sqrt(CAM.M / CAM.Q);
+		}
+		if (correlates.H) {
+		    CAM.H = hq.fromHue(h);
+		}
+
+		return CAM;
 	}
 
 	function toXyz (CAM) {
@@ -114,12 +137,8 @@ function Converter (viewingConditions={}) {
 		    h_rad = radian(h);
 
 		J = isNaN(J) ? 6.25 * pow(c * Q / ((A_w + 4) * pow(F_L, 0.25)), 2) : J;
-		Q = isNaN(Q) ? 4/c * sqrt(J/100) * (A_w + 4) * pow(F_L, 0.25) : Q;
 		C = isNaN(C) ? (isNaN(M) ? pow(s / 100, 2) * Q / pow(F_L, 0.25) : M / pow(F_L, 0.25)) : C;
-		M = isNaN(M) ? C * pow(F_L, 0.25) : M;
-		s = isNaN(s) ? 100 * sqrt(M / Q) : s;
-		h = isNaN(h) ? reverseHueQuadrature(H) : h;
-		H = isNaN(H) ? hueQuadrature(h) : H;
+		h = isNaN(h) ? hq.toHue(H) : h;
 
 		var t = pow(C / (sqrt(J / 100) * pow(1.64 - pow(0.29, n), 0.73)), 10 / 9),
 		    e_t = 1 / 4 * (cos(h_rad + 2) + 3.8),
@@ -155,43 +174,38 @@ function Converter (viewingConditions={}) {
 		var RGB_c = reverseAdaptedResponses(RGB_a),
 		    XYZ = reverseCorrespondingColors(RGB_c);
 
+		CAM = {};
+		if (correlates.J) {
+			CAM.J = J;
+		}
+		if (correlates.C) {
+			CAM.C = C;
+		}
+		if (correlates.h) {
+			CAM.h = h;
+		}
+		if (correlates.Q || correlates.s) {
+			CAM.Q = isNaN(Q) ? 4/c * sqrt(J/100) * (A_w + 4) * pow(F_L, 0.25) : Q;
+		}
+		if (correlates.M || correlates.s) {
+			CAM.M = isNaN(M) ? C * pow(F_L, 0.25) : M;
+		}
+		if (correlates.s) {
+			CAM.s = isNaN(s) ? 100 * sqrt(CAM.M / CAM.Q) : s;
+		}
+		if (correlates.H) {
+			CAM.H = isNaN(H) ? hq.fromHue(h) : H;
+		}
+		XYZ.CAM = CAM;
+
 		return XYZ;
 	}
 
 	return {
 		fromXyz: fromXyz,
-		toXyz: toXyz
+		toXyz: toXyz,
+		correlates: correlates
 	};
-}
-
-var uniqueHues = [
-	{s: "R", h: 20.14, e: 0.8, H: 0},
-	{s: "Y", h: 90.00, e: 0.7, H: 100},
-	{s: "G", h: 164.25, e: 1.0, H: 200},
-	{s: "B", h: 237.53, e: 1.2, H: 300},
-	{s: "R", h: 380.14, e: 0.8, H: 400}
-];
-
-function hueQuadrature (h) {
-	if (h < uniqueHues[0].h) {
-		h += 360;
-	}
-	var j = 0;
-	while (uniqueHues[j+1].h < h) {
-		j++;
-	}
-	var d_j = (h - uniqueHues[j].h) / uniqueHues[j].e,
-	    d_k = (uniqueHues[j+1].h - h) / uniqueHues[j+1].e,
-	    H_j = uniqueHues[j].H;
-	return H_j + 100 * d_j / (d_j + d_k);
-}
-
-function reverseHueQuadrature (H) {
-	var j = floor(H / 100),
-	    amt = H % 100,
-	    [{e: e_j, h: h_j}, {e: e_k, h: h_k}] = uniqueHues.slice(j, j+2),
-	    h = ((amt * (e_k * h_j - e_j * h_k) - 100 * h_j * e_k) / (amt * (e_k - e_j) - 100 * e_k));
-	return h;
 }
 
 module.exports = Converter;

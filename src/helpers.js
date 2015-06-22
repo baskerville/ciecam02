@@ -15,7 +15,16 @@ function radian (d) {
 	return PI * d / 180;
 }
 
+function asObject (a) {
+	var o = {};
+	a.forEach(function (e) {
+		o[e] = true;
+	});
+	return o;
+}
+
 module.exports = {
 	degree: degree,
-	radian: radian
+	radian: radian,
+	asObject: asObject
 };

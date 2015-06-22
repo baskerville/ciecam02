@@ -3,7 +3,8 @@ var illuminant = require("./dist/illuminant"),
     rgb = require("./dist/rgb"),
     xyz = require("./dist/xyz"),
     cam = require("./dist/cam"),
-    ucs = require("./dist/ucs");
+    ucs = require("./dist/ucs"),
+    hq = require("./dist/hq");
 
 module.exports = {
 	illuminant: illuminant,
@@ -11,5 +12,6 @@ module.exports = {
 	rgb: rgb,
 	xyz: xyz,
 	cam: cam,
-	ucs: ucs
+	ucs: ucs,
+	hq: hq
 };
