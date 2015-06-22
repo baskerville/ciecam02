@@ -190,13 +190,13 @@ function Converter() {
 		var s = CAM.s;
 		var h = CAM.h;
 		var H = CAM.H;
-		var h_rad = radian(h);
 
 		J = isNaN(J) ? 6.25 * pow(c * Q / ((A_w + 4) * pow(F_L, 0.25)), 2) : J;
 		C = isNaN(C) ? isNaN(M) ? pow(s / 100, 2) * Q / pow(F_L, 0.25) : M / pow(F_L, 0.25) : C;
 		h = isNaN(h) ? hq.toHue(H) : h;
 
-		var t = pow(C / (sqrt(J / 100) * pow(1.64 - pow(0.29, n), 0.73)), 10 / 9),
+		var h_rad = radian(h),
+		    t = pow(C / (sqrt(J / 100) * pow(1.64 - pow(0.29, n), 0.73)), 10 / 9),
 		    e_t = 1 / 4 * (cos(h_rad + 2) + 3.8),
 		    A = A_w * pow(J / 100, 1 / c / z);
 
