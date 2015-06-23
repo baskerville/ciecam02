@@ -5,40 +5,40 @@ var CamConv = require("../dist/cam"),
     ε = 0.05;
 
 describe("Roundtrips", function () {
-	var rc = require("../dist/rgb"),
-	    hc = require("../dist/hq"),
-	    xc = XyzConv(),
-	    cc = CamConv(),
-	    uc = UcsConv(),
+	var rgb = require("../dist/rgb"),
+	    hq = require("../dist/hq"),
+	    xyz = XyzConv(),
+	    cam = CamConv(),
+	    ucs = UcsConv(),
 	    hex = "#e73e01",
-	    RGB = rc.fromHex(hex),
-	    XYZ = xc.fromRgb(RGB),
-	    CAM = cc.fromXyz(XYZ),
-	    UCS = uc.fromCam(CAM);
+	    RGB = rgb.fromHex(hex),
+	    XYZ = xyz.fromRgb(RGB),
+	    CAM = cam.fromXyz(XYZ),
+	    UCS = ucs.fromCam(CAM);
 	it("Rgb", function () {
-		assert.equal(hex, rc.toHex(RGB));
+		assert.equal(hex, rgb.toHex(RGB));
 	});
 	it("Xyz", function () {
-		var rRGB = xc.toRgb(XYZ);
+		var rRGB = xyz.toRgb(XYZ);
 		assert.closeTo(RGB[0], rRGB[0], ε);
 		assert.closeTo(RGB[1], rRGB[1], ε);
 		assert.closeTo(RGB[2], rRGB[2], ε);
 	});
 	it("Cam", function () {
-		var rXYZ = cc.toXyz(CAM);
+		var rXYZ = cam.toXyz(CAM);
 		assert.closeTo(XYZ[0], rXYZ[0], ε);
 		assert.closeTo(XYZ[1], rXYZ[1], ε);
 		assert.closeTo(XYZ[2], rXYZ[2], ε);
 	});
 	it("Ucs", function () {
-		var rCAM = uc.toCam(UCS);
+		var rCAM = ucs.toCam(UCS);
 		assert.closeTo(CAM.J, rCAM.J, ε);
 		assert.closeTo(CAM.M, rCAM.M, ε);
 		assert.closeTo(CAM.h, rCAM.h, ε);
 	});
 	it("Hq", function () {
 		var h = 237;
-		assert.closeTo(h, hc.toHue(hc.fromHue(h)), ε);
+		assert.closeTo(h, hq.toHue(hq.fromHue(h)), ε);
 	});
 });
 
