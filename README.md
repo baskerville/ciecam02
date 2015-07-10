@@ -15,7 +15,7 @@ Converters:
 	cam(viewingConditions?, correlates?="QJMCshH") -> {
 		fromXyz(XYZ) -> CAM,
 		toXyz(CAM) -> XYZ,
-		fillOut(CAM, correlates, J, C, h, Q?, M?, s?, H?) -> CAM
+		fillOut(correlates, J, C, h, Q?, M?, s?, H?) -> CAM
 	}
 
 	ucs(name?="UCS") -> {

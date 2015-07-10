@@ -149,7 +149,13 @@ function Converter() {
 		return C * pow(F_L, 0.25);
 	}
 
-	function fillOut(CAM, correlates, J, C, h, Q, M, s, H) {
+	function fillOut(correlates, J, C, h, Q, M, s, H) {
+		if (typeof correlates == "string") {
+			correlates = asObject(correlates.split(""));
+		}
+
+		var CAM = {};
+
 		if (correlates.J) {
 			CAM.J = J;
 		}
@@ -177,6 +183,8 @@ function Converter() {
 		if (correlates.H) {
 			CAM.H = isNaN(H) ? hq.fromHue(h) : H;
 		}
+
+		return CAM;
 	}
 
 	function fromXyz(XYZ) {
@@ -199,10 +207,7 @@ function Converter() {
 		    t = 50000 / 13 * N_c * N_cb * e_t * sqrt(a * a + b * b) / (R_a + G_a + 21 / 20 * B_a),
 		    C = pow(t, 0.9) * sqrt(J / 100) * pow(1.64 - pow(0.29, n), 0.73);
 
-		var CAM = {};
-		fillOut(CAM, correlates, J, C, h);
-
-		return CAM;
+		return fillOut(correlates, J, C, h);
 	}
 
 	function toXyz(CAM) {
@@ -256,8 +261,7 @@ function Converter() {
 		var RGB_c = reverseAdaptedResponses(RGB_a),
 		    XYZ = reverseCorrespondingColors(RGB_c);
 
-		CAM = {};
-		fillOut(CAM, correlates, J, C, h, Q, M, s, H);
+		CAM = fillOut(correlates, J, C, h, Q, M, s, H);
 		XYZ.CAM = CAM;
 
 		return XYZ;
