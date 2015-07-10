@@ -2,6 +2,10 @@
 
 function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }
 
+function _defineProperty(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
+
 var illuminant = require("./illuminant");
 var matrix = require("./matrix");
 var hq = require("./hq");
@@ -11,7 +15,6 @@ var _require = require("./helpers");
 
 var degree = _require.degree;
 var radian = _require.radian;
-var asObject = _require.asObject;
 var pow = Math.pow;
 var sqrt = Math.sqrt;
 var exp = Math.exp;
@@ -36,20 +39,24 @@ var XYZ_to_CAT02 = M_CAT02,
     CAT02_to_HPE = matrix.product(M_HPE, matrix.inverse(M_CAT02)),
     HPE_to_CAT02 = matrix.product(M_CAT02, matrix.inverse(M_HPE));
 
+var defaultViewingConditions = {
+	whitePoint: illuminant.D65,
+	adaptingLuminance: 40,
+	backgroundLuminance: 20,
+	surroundType: "average",
+	discounting: false
+};
+
+var defaultCorrelates = merge.apply(undefined, _toConsumableArray("QJMCshH".split("").map(function (v) {
+	return _defineProperty({}, v, true);
+})));
+
 // CIECAM02 and Its Recent Developments - Ming Ronnier Luo and Changjun Li
 function Converter() {
 	var viewingConditions = arguments[0] === undefined ? {} : arguments[0];
-	var correlates = arguments[1] === undefined ? "QJMCshH" : arguments[1];
+	var correlates = arguments[1] === undefined ? defaultCorrelates : arguments[1];
 
-	viewingConditions = merge({
-		whitePoint: illuminant.D65,
-		adaptingLuminance: 40,
-		backgroundLuminance: 20,
-		surroundType: "average",
-		discounting: false
-	}, viewingConditions);
-
-	correlates = asObject(correlates.split(""));
+	viewingConditions = merge(defaultViewingConditions, viewingConditions);
 
 	var XYZ_w = viewingConditions.whitePoint;
 	var L_A = viewingConditions.adaptingLuminance;
@@ -133,6 +140,14 @@ function Converter() {
 		return 4 / c * sqrt(J / 100) * (A_w + 4) * pow(F_L, 0.25);
 	}
 
+	function lightness(Q) {
+		return 6.25 * pow(c * Q / ((A_w + 4) * pow(F_L, 0.25)), 2);
+	}
+
+	function colorfulness(C) {
+		return C * pow(F_L, 0.25);
+	}
+
 	function chromaFromSaturationBrightness(s, Q) {
 		return pow(s / 100, 2) * Q / pow(F_L, 0.25);
 	}
@@ -145,46 +160,54 @@ function Converter() {
 		return 100 * sqrt(M / Q);
 	}
 
-	function colorfulness(C) {
-		return C * pow(F_L, 0.25);
-	}
-
-	function fillOut(correlates, J, C, h, Q, M, s, H) {
-		if (typeof correlates == "string") {
-			correlates = asObject(correlates.split(""));
-		}
-
-		var CAM = {};
+	function fillOut(correlates, inputs) {
+		var Q = inputs.Q;
+		var J = inputs.J;
+		var M = inputs.M;
+		var C = inputs.C;
+		var s = inputs.s;
+		var h = inputs.h;
+		var H = inputs.H;
+		var outputs = {};
 
 		if (correlates.J) {
-			CAM.J = J;
+			outputs.J = isNaN(J) ? lightness(Q) : J;
 		}
 		if (correlates.C) {
-			CAM.C = C;
+			if (isNaN(C)) {
+				if (isNaN(M)) {
+					Q = isNaN(Q) ? brightness(J) : Q;
+					outputs.C = chromaFromSaturationBrightness(s, Q);
+				} else {
+					outputs.C = chromaFromColorfulness(M);
+				}
+			} else {
+				outputs.C = inputs.C;
+			}
 		}
 		if (correlates.h) {
-			CAM.h = h;
+			outputs.h = isNaN(h) ? hq.toHue(H) : h;
 		}
 		if (correlates.Q) {
-			CAM.Q = isNaN(Q) ? brightness(J) : Q;
+			outputs.Q = isNaN(Q) ? brightness(J) : Q;
 		}
 		if (correlates.M) {
-			CAM.M = isNaN(M) ? colorfulness(C) : M;
+			outputs.M = isNaN(M) ? colorfulness(C) : M;
 		}
 		if (correlates.s) {
 			if (isNaN(s)) {
 				Q = isNaN(Q) ? brightness(J) : Q;
 				M = isNaN(M) ? colorfulness(C) : M;
-				CAM.s = saturation(M, Q);
+				outputs.s = saturation(M, Q);
 			} else {
-				CAM.s = s;
+				outputs.s = s;
 			}
 		}
 		if (correlates.H) {
-			CAM.H = isNaN(H) ? hq.fromHue(h) : H;
+			outputs.H = isNaN(H) ? hq.fromHue(h) : H;
 		}
 
-		return CAM;
+		return outputs;
 	}
 
 	function fromXyz(XYZ) {
@@ -207,33 +230,19 @@ function Converter() {
 		    t = 50000 / 13 * N_c * N_cb * e_t * sqrt(a * a + b * b) / (R_a + G_a + 21 / 20 * B_a),
 		    C = pow(t, 0.9) * sqrt(J / 100) * pow(1.64 - pow(0.29, n), 0.73);
 
-		return fillOut(correlates, J, C, h);
+		return fillOut(correlates, { J: J, C: C, h: h });
 	}
 
 	function toXyz(CAM) {
-		var Q = CAM.Q;
-		var J = CAM.J;
-		var M = CAM.M;
-		var C = CAM.C;
-		var s = CAM.s;
-		var h = CAM.h;
-		var H = CAM.H;
+		var _fillOut = fillOut({ J: 1, C: 1, h: 1 }, CAM);
 
-		J = isNaN(J) ? 6.25 * pow(c * Q / ((A_w + 4) * pow(F_L, 0.25)), 2) : J;
-		if (isNaN(C)) {
-			if (isNaN(M)) {
-				Q = isNaN(Q) ? brightness(J) : Q;
-				C = chromaFromSaturationBrightness(s, Q);
-			} else {
-				C = chromaFromColorfulness(M);
-			}
-		}
-		h = isNaN(h) ? hq.toHue(H) : h;
-
-		var h_rad = radian(h),
-		    t = pow(C / (sqrt(J / 100) * pow(1.64 - pow(0.29, n), 0.73)), 10 / 9),
-		    e_t = 1 / 4 * (cos(h_rad + 2) + 3.8),
-		    A = A_w * pow(J / 100, 1 / c / z);
+		var J = _fillOut.J;
+		var C = _fillOut.C;
+		var h = _fillOut.h;
+		var h_rad = radian(h);
+		var t = pow(C / (sqrt(J / 100) * pow(1.64 - pow(0.29, n), 0.73)), 10 / 9);
+		var e_t = 1 / 4 * (cos(h_rad + 2) + 3.8);
+		var A = A_w * pow(J / 100, 1 / c / z);
 
 		var p_1 = 50000 / 13 * N_c * N_cb * e_t / t,
 		    p_2 = A / N_bb + 0.305,
@@ -261,16 +270,12 @@ function Converter() {
 		var RGB_c = reverseAdaptedResponses(RGB_a),
 		    XYZ = reverseCorrespondingColors(RGB_c);
 
-		CAM = fillOut(correlates, J, C, h, Q, M, s, H);
-		XYZ.CAM = CAM;
-
 		return XYZ;
 	}
 
 	return {
 		fromXyz: fromXyz,
 		toXyz: toXyz,
-		correlates: correlates,
 		fillOut: fillOut
 	};
 }

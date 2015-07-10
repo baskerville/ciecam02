@@ -12,10 +12,10 @@ Converters:
 		toRgb(XYZ) -> RGB,
 	}
 
-	cam(viewingConditions?, correlates?="QJMCshH") -> {
+	cam(viewingConditions?, correlates?) -> {
 		fromXyz(XYZ) -> CAM,
 		toXyz(CAM) -> XYZ,
-		fillOut(correlates, J, C, h, Q?, M?, s?, H?) -> CAM
+		fillOut(correlates, inputs) -> outputs
 	}
 
 	ucs(name?="UCS") -> {
