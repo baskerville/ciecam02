@@ -149,7 +149,7 @@ function Converter() {
 		return C * pow(F_L, 0.25);
 	}
 
-	function fillOut(CAM, J, C, h, Q, M, s, H) {
+	function fillOut(CAM, correlates, J, C, h, Q, M, s, H) {
 		if (correlates.J) {
 			CAM.J = J;
 		}
@@ -200,7 +200,7 @@ function Converter() {
 		    C = pow(t, 0.9) * sqrt(J / 100) * pow(1.64 - pow(0.29, n), 0.73);
 
 		var CAM = {};
-		fillOut(CAM, J, C, h);
+		fillOut(CAM, correlates, J, C, h);
 
 		return CAM;
 	}
@@ -257,7 +257,7 @@ function Converter() {
 		    XYZ = reverseCorrespondingColors(RGB_c);
 
 		CAM = {};
-		fillOut(CAM, J, C, h, Q, M, s, H);
+		fillOut(CAM, correlates, J, C, h, Q, M, s, H);
 		XYZ.CAM = CAM;
 
 		return XYZ;
@@ -266,7 +266,8 @@ function Converter() {
 	return {
 		fromXyz: fromXyz,
 		toXyz: toXyz,
-		correlates: correlates
+		correlates: correlates,
+		fillOut: fillOut
 	};
 }
 
