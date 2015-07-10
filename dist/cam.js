@@ -129,6 +129,56 @@ function Converter() {
 		return (R_a * 2 + G_a + B_a / 20 - 0.305) * N_bb;
 	}
 
+	function brightness(J) {
+		return 4 / c * sqrt(J / 100) * (A_w + 4) * pow(F_L, 0.25);
+	}
+
+	function chromaFromSaturationBrightness(s, Q) {
+		return pow(s / 100, 2) * Q / pow(F_L, 0.25);
+	}
+
+	function chromaFromColorfulness(M) {
+		return M / pow(F_L, 0.25);
+	}
+
+	function saturation(M, Q) {
+		return 100 * sqrt(M / Q);
+	}
+
+	function colorfulness(C) {
+		return C * pow(F_L, 0.25);
+	}
+
+	function fillOut(CAM, J, C, h, Q, M, s, H) {
+		if (correlates.J) {
+			CAM.J = J;
+		}
+		if (correlates.C) {
+			CAM.C = C;
+		}
+		if (correlates.h) {
+			CAM.h = h;
+		}
+		if (correlates.Q) {
+			CAM.Q = isNaN(Q) ? brightness(J) : Q;
+		}
+		if (correlates.M) {
+			CAM.M = isNaN(M) ? colorfulness(C) : M;
+		}
+		if (correlates.s) {
+			if (isNaN(s)) {
+				Q = isNaN(Q) ? brightness(J) : Q;
+				M = isNaN(M) ? colorfulness(C) : M;
+				CAM.s = saturation(M, Q);
+			} else {
+				CAM.s = s;
+			}
+		}
+		if (correlates.H) {
+			CAM.H = isNaN(H) ? hq.fromHue(h) : H;
+		}
+	}
+
 	function fromXyz(XYZ) {
 		var RGB_c = correspondingColors(XYZ);
 		var RGB_a = adaptedResponses(RGB_c);
@@ -150,34 +200,7 @@ function Converter() {
 		    C = pow(t, 0.9) * sqrt(J / 100) * pow(1.64 - pow(0.29, n), 0.73);
 
 		var CAM = {};
-
-		if (correlates.J) {
-			CAM.J = J;
-		}
-		if (correlates.C) {
-			CAM.C = C;
-		}
-		if (correlates.h) {
-			CAM.h = h;
-		}
-		if (correlates.Q || correlates.s) {
-			CAM.Q = 4 / c * sqrt(J / 100) * (A_w + 4) * pow(F_L, 0.25);
-		}
-		if (correlates.M || correlates.s) {
-			CAM.M = C * pow(F_L, 0.25);
-		}
-		if (correlates.s) {
-			CAM.s = 100 * sqrt(CAM.M / CAM.Q);
-			if (!correlates.M) {
-				delete CAM.M;
-			}
-			if (!correlates.Q) {
-				delete CAM.Q;
-			}
-		}
-		if (correlates.H) {
-			CAM.H = hq.fromHue(h);
-		}
+		fillOut(CAM, J, C, h);
 
 		return CAM;
 	}
@@ -192,7 +215,14 @@ function Converter() {
 		var H = CAM.H;
 
 		J = isNaN(J) ? 6.25 * pow(c * Q / ((A_w + 4) * pow(F_L, 0.25)), 2) : J;
-		C = isNaN(C) ? isNaN(M) ? pow(s / 100, 2) * Q / pow(F_L, 0.25) : M / pow(F_L, 0.25) : C;
+		if (isNaN(C)) {
+			if (isNaN(M)) {
+				Q = isNaN(Q) ? brightness(J) : Q;
+				C = chromaFromSaturationBrightness(s, Q);
+			} else {
+				C = chromaFromColorfulness(M);
+			}
+		}
 		h = isNaN(h) ? hq.toHue(H) : h;
 
 		var h_rad = radian(h),
@@ -227,33 +257,7 @@ function Converter() {
 		    XYZ = reverseCorrespondingColors(RGB_c);
 
 		CAM = {};
-		if (correlates.J) {
-			CAM.J = J;
-		}
-		if (correlates.C) {
-			CAM.C = C;
-		}
-		if (correlates.h) {
-			CAM.h = h;
-		}
-		if (correlates.Q || correlates.s) {
-			CAM.Q = isNaN(Q) ? 4 / c * sqrt(J / 100) * (A_w + 4) * pow(F_L, 0.25) : Q;
-		}
-		if (correlates.M || correlates.s) {
-			CAM.M = isNaN(M) ? C * pow(F_L, 0.25) : M;
-		}
-		if (correlates.s) {
-			CAM.s = isNaN(s) ? 100 * sqrt(CAM.M / CAM.Q) : s;
-			if (!correlates.M) {
-				delete CAM.M;
-			}
-			if (!correlates.Q) {
-				delete CAM.Q;
-			}
-		}
-		if (correlates.H) {
-			CAM.H = isNaN(H) ? hq.fromHue(h) : H;
-		}
+		fillOut(CAM, J, C, h, Q, M, s, H);
 		XYZ.CAM = CAM;
 
 		return XYZ;
