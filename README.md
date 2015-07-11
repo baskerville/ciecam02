@@ -4,7 +4,8 @@ Converters:
 
 	rgb: {
 		fromHex(hex) -> RGB,
-		toHex(RGB) -> hex
+		toHex(RGB) -> hex,
+		inGamut(RGB) -> boolean
 	}
 
 	xyz(rgbSpace?=workspace.sRGB, whitePoint?=illuminant.D65) -> {
