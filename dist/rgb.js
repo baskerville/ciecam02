@@ -7,6 +7,11 @@ module.exports = {
 		if (hex[0] == "#") {
 			hex = hex.slice(1);
 		}
+		if (hex.length < 6) {
+			hex = hex.split("").map(function (v) {
+				return v + v;
+			}).join("");
+		}
 		return hex.match(/../g).map(function (v) {
 			return parseInt(v, 16) / 255;
 		});

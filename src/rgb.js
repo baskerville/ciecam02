@@ -5,6 +5,9 @@ module.exports = {
 		if (hex[0] == "#") {
 			hex = hex.slice(1);
 		}
+		if (hex.length < 6) {
+			hex = hex.split("").map(v => v+v).join("");
+		}
 		return hex.match(/../g).map(v => parseInt(v, 16)/255);
 	},
 	toHex (RGB) {
