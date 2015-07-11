@@ -10,7 +10,7 @@ Converters:
 
 	xyz(rgbSpace?=workspace.sRGB, whitePoint?=illuminant.D65) -> {
 		fromRgb(RGB) -> XYZ,
-		toRgb(XYZ) -> RGB,
+		toRgb(XYZ) -> RGB
 	}
 
 	cam(viewingConditions?, correlates?) -> {
