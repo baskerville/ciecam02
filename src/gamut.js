@@ -3,8 +3,9 @@ var merge = require("mout/object/merge"),
 
 function Gamut (xyz, cam) {
 	function contains (CAM) {
-		var RGB = xyz.toRgb(cam.toXyz(CAM));
-		return (RGB[0] >= 0 && RGB[0] <= 1 && RGB[1] >= 0 && RGB[1] <= 1 && RGB[2] >= 0 && RGB[2] <= 1);
+		var RGB = xyz.toRgb(cam.toXyz(CAM)),
+		    isInside = (RGB[0] >= 0 && RGB[0] <= 1 && RGB[1] >= 0 && RGB[1] <= 1 && RGB[2] >= 0 && RGB[2] <= 1);
+		return [isInside, RGB];
 	}
 
 	function limit (inCam, outCam, cor="C", prec=1e-3) {
