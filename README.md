@@ -39,3 +39,10 @@ Default viewing conditions:
 		surroundType: "average",
 		discounting: false
 	}
+
+Gamut helpers:
+
+	gamut(xyz, cam) -> {
+		contains(CAM) -> boolean,
+		limit(inCam, outCam, cor?="C", prec?=1e-3) -> CAM
+	}

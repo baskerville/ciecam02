@@ -25,8 +25,5 @@ module.exports = {
 			return v;
 		}).join("");
 		return "#" + hex;
-	},
-	inGamut: function inGamut(RGB) {
-		return RGB[0] >= 0 && RGB[0] <= 1 && RGB[1] >= 0 && RGB[1] <= 1 && RGB[2] >= 0 && RGB[2] <= 1;
 	}
 };
