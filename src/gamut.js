@@ -12,8 +12,9 @@ function Gamut (xyz, cam) {
 		var bot = inCam[cor],
 		    top = outCam[cor];
 		while (abs(top-bot) > prec) {
-			var mid = (bot + top) / 2;
-			if (contains(merge(inCam, {[cor]: mid}))) {
+			var mid = (bot + top) / 2,
+			    [isInside,] = contains(merge(inCam, {[cor]: mid}));
+			if (isInside) {
 				bot = mid;
 			} else {
 				top = mid;
