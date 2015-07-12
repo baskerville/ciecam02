@@ -1,31 +1,31 @@
 var {pow} = Math;
 
 var sRgbGamma = {
-	decode (x) {
-		return (x <= 0.04045 ? x/12.92 : pow((x+0.055)/1.055, 2.4));
+	decode (v) {
+		return (v <= 0.04045 ? v/12.92 : pow((v+0.055)/1.055, 2.4));
 	},
-	encode (x) {
-		return (x <= 0.0031308 ? 12.92*x : 1.055*pow(x, 1/2.4)-0.055);
+	encode (v) {
+		return (v <= 0.0031308 ? 12.92*v : 1.055*pow(v, 1/2.4)-0.055);
 	}
 };
 
 
 var proPhotoGamma = {
-	encode (x) {
-		return (x < 0.001953125 ? 16 * x : pow(x, 1/1.8));
+	encode (v) {
+		return (v < 0.001953125 ? 16 * v : pow(v, 1/1.8));
 	},
-	decode (x) {
-		return (x < 16 * 0.001953125 ? x / 16 : pow(x, 1.8));
+	decode (v) {
+		return (v < 16 * 0.001953125 ? v / 16 : pow(v, 1.8));
 	}
 };
 
 function simpleGamma (g) {
 	return {
-		decode (x) {
-			return pow(x, g);
+		decode (v) {
+			return pow(v, g);
 		},
-		encode (x) {
-			return pow(x, 1/g);
+		encode (v) {
+			return pow(v, 1/g);
 		}
 	};
 }
