@@ -5,9 +5,16 @@ var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var merge = require("mout/object/merge");
+
+var _require = require("./helpers");
+
+var lerp = _require.lerp;
 var abs = Math.abs;
 
 function Gamut(xyz, cam) {
+	var camBlack = cam.fromXyz(xyz.fromRgb([0.0, 0.0, 0.0])),
+	    camWhite = cam.fromXyz(xyz.fromRgb([1.0, 1.0, 1.0]));
+
 	function contains(CAM) {
 		var epsilon = arguments[1] === undefined ? Number.EPSILON : arguments[1];
 
@@ -26,29 +33,38 @@ function Gamut(xyz, cam) {
 		var cor = arguments[2] === undefined ? "C" : arguments[2];
 		var prec = arguments[3] === undefined ? 1e-3 : arguments[3];
 
-		var bot = inCam[cor],
-		    top = outCam[cor];
-		while (abs(top - bot) > prec) {
-			var mid = (bot + top) / 2;
+		var inVal = inCam[cor],
+		    outVal = outCam[cor];
+		while (abs(inVal - outVal) > prec) {
+			var midVal = lerp(inVal, outVal, 0.5, cor);
 
-			var _contains = contains(merge(inCam, _defineProperty({}, cor, mid)));
+			var _contains = contains(merge(inCam, _defineProperty({}, cor, midVal)));
 
 			var _contains2 = _slicedToArray(_contains, 1);
 
 			var isInside = _contains2[0];
 
 			if (isInside) {
-				bot = mid;
+				inVal = midVal;
 			} else {
-				top = mid;
+				outVal = midVal;
 			}
 		}
-		return merge(inCam, _defineProperty({}, cor, bot));
+		return merge(inCam, _defineProperty({}, cor, inVal));
+	}
+
+	function spine(t) {
+		var CAM = {};
+		for (var cor in camBlack) {
+			CAM[cor] = lerp(camBlack[cor], camWhite[cor], t, cor);
+		}
+		return CAM;
 	}
 
 	return {
 		contains: contains,
-		limit: limit
+		limit: limit,
+		spine: spine
 	};
 }
 
