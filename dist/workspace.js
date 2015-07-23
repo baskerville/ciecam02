@@ -34,7 +34,7 @@ function simpleGamma(g) {
 var workspaces = {
 	"sRGB": {
 		r: { x: 0.64, y: 0.33 },
-		g: { x: 0.3, y: 0.6 },
+		g: { x: 0.30, y: 0.60 },
 		b: { x: 0.15, y: 0.06 },
 		gamma: sRgbGamma
 	},

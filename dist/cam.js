@@ -1,10 +1,10 @@
 "use strict";
 
-function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }
-
-function _defineProperty(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); }
+var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; })();
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var illuminant = require("./illuminant");
 var matrix = require("./matrix");
@@ -25,14 +25,14 @@ var cos = Math.cos;
 var atan2 = Math.atan2;
 
 var surrounds = {
-	average: { F: 1, c: 0.69, N_c: 1 },
+	average: { F: 1.0, c: 0.69, N_c: 1.0 },
 	dim: { F: 0.9, c: 0.59, N_c: 0.9 },
 	dark: { F: 0.8, c: 0.535, N_c: 0.8 }
 };
 
-var M_CAT02 = [[0.7328, 0.4296, -0.1624], [-0.7036, 1.6975, 0.0061], [0.003, 0.0136, 0.9834]];
+var M_CAT02 = [[0.7328, 0.4296, -0.1624], [-0.7036, 1.6975, 0.0061], [0.0030, 0.0136, 0.9834]];
 
-var M_HPE = [[0.38971, 0.68898, -0.07868], [-0.22981, 1.1834, 0.04641], [0, 0, 1]];
+var M_HPE = [[0.38971, 0.68898, -0.07868], [-0.22981, 1.18340, 0.04641], [0.00000, 0.00000, 1.00000]];
 
 var XYZ_to_CAT02 = M_CAT02,
     CAT02_to_XYZ = matrix.inverse(M_CAT02),
@@ -227,7 +227,7 @@ function Converter() {
 		    e_t = 1 / 4 * (cos(h_rad + 2) + 3.8),
 		    A = achromaticResponse(RGB_a),
 		    J = 100 * pow(A / A_w, c * z),
-		    t = 50000 / 13 * N_c * N_cb * e_t * sqrt(a * a + b * b) / (R_a + G_a + 21 / 20 * B_a),
+		    t = 5e4 / 13 * N_c * N_cb * e_t * sqrt(a * a + b * b) / (R_a + G_a + 21 / 20 * B_a),
 		    C = pow(t, 0.9) * sqrt(J / 100) * pow(1.64 - pow(0.29, n), 0.73);
 
 		return fillOut(correlates, { J: J, C: C, h: h });
@@ -244,7 +244,7 @@ function Converter() {
 		var e_t = 1 / 4 * (cos(h_rad + 2) + 3.8);
 		var A = A_w * pow(J / 100, 1 / c / z);
 
-		var p_1 = 50000 / 13 * N_c * N_cb * e_t / t,
+		var p_1 = 5e4 / 13 * N_c * N_cb * e_t / t,
 		    p_2 = A / N_bb + 0.305,
 		    q_1 = p_2 * 61 / 20 * 460 / 1403,
 		    q_2 = 61 / 20 * 220 / 1403,

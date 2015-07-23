@@ -15,7 +15,7 @@ var atan2 = Math.atan2;
 var uniformSpaces = {
 	LCD: { K_L: 0.77, c_1: 0.007, c_2: 0.0053 },
 	SCD: { K_L: 1.24, c_1: 0.007, c_2: 0.0363 },
-	UCS: { K_L: 1, c_1: 0.007, c_2: 0.0228 }
+	UCS: { K_L: 1.00, c_1: 0.007, c_2: 0.0228 }
 };
 
 function Converter() {

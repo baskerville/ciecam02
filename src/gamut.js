@@ -2,9 +2,11 @@ var merge = require("mout/object/merge"),
     {abs} = Math;
 
 function Gamut (xyz, cam) {
-	function contains (CAM) {
+	function contains (CAM, epsilon=Number.EPSILON) {
 		var RGB = xyz.toRgb(cam.toXyz(CAM)),
-		    isInside = (RGB[0] >= 0 && RGB[0] <= 1 && RGB[1] >= 0 && RGB[1] <= 1 && RGB[2] >= 0 && RGB[2] <= 1);
+		    zero = -epsilon,
+		    one = 1 + epsilon,
+		    isInside = RGB.map(v => (v >= zero && v <= one)).reduce((a, b) => a && b);
 		return [isInside, RGB];
 	}
 

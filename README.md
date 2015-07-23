@@ -43,6 +43,6 @@ Default viewing conditions:
 Gamut helpers:
 
 	gamut(xyz, cam) -> {
-		contains(CAM) -> (boolean, RGB),
+		contains(CAM, epsilon?=Number.EPSILON) -> (boolean, RGB),
 		limit(inCam, outCam, cor?="C", prec?=1e-3) -> CAM
 	}
