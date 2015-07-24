@@ -25,7 +25,7 @@ Converters:
 		lerp(UCS1, UCS2, t) -> UCS
 	}
 
-	hq: {
+	hq, hn: {
 		fromHue(h) -> H,
 		toHue(H) -> h
 	}

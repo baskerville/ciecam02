@@ -6,7 +6,8 @@ var illuminant = require("./dist/illuminant"),
     cam = require("./dist/cam"),
     ucs = require("./dist/ucs"),
     cfs = require("./dist/helpers").cfs,
-    hq = require("./dist/hq");
+    hq = require("./dist/hq"),
+    hn = require("./dist/hn");
 
 module.exports = {
 	illuminant: illuminant,
@@ -17,5 +18,6 @@ module.exports = {
 	xyz: xyz,
 	cam: cam,
 	ucs: ucs,
-	hq: hq
+	hq: hq,
+	hn: hn
 };
