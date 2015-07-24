@@ -22,7 +22,8 @@ Converters:
 	ucs(name?="UCS") -> {
 		fromCam(CAM) -> UCS,
 		toCam(UCS) -> CAM,
-		distance(UCS1, UCS2) -> number
+		distance(UCS1, UCS2) -> number,
+		lerp(UCS1, UCS2, t) -> UCS
 	}
 
 	hq: {
@@ -44,6 +45,10 @@ Gamut helpers:
 
 	gamut(xyz, cam) -> {
 		contains(CAM, epsilon?=Number.EPSILON) -> (boolean, RGB),
-		limit(inCam, outCam, cor?="C", prec?=1e-3) -> CAM,
+		limit(inCam, outCam, prec?=1e-3) -> CAM,
 		spine(t) -> CAM
 	}
+
+Misc helpers:
+
+	cfs(str) -> correlates

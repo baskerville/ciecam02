@@ -1,6 +1,10 @@
 "use strict";
 
-var abs = Math.abs;
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var merge = require("mout/object/merge");
 var PI = Math.PI;
 
 function degree(r) {
@@ -18,28 +22,14 @@ function radian(d) {
 	return PI * d / 180;
 }
 
-var hueMax = {
-	h: 360,
-	H: 400
-};
-
-function lerp(a, b, t, cor) {
-	var m = hueMax[cor];
-	if (m) {
-		var d = abs(a - b);
-		if (d > m / 2) {
-			if (a > b) {
-				b += m;
-			} else {
-				a += m;
-			}
-		}
-	}
-	return ((1 - t) * a + t * b) % (m || Infinity);
+function cfs(str) {
+	return merge.apply(undefined, _toConsumableArray(str.split("").map(function (v) {
+		return _defineProperty({}, v, true);
+	})));
 }
 
 module.exports = {
 	degree: degree,
 	radian: radian,
-	lerp: lerp
+	cfs: cfs
 };

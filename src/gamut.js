@@ -1,10 +1,12 @@
-var merge = require("mout/object/merge"),
-    {lerp} = require("./helpers"),
-    {abs} = Math;
+var ucs = require("./ucs")(),
+    rgb = require("./rgb"),
+    {cfs} = require("./helpers"),
+    map = require("mout/object/map");
 
 function Gamut (xyz, cam) {
-	var camBlack = cam.fromXyz(xyz.fromRgb([0.0, 0.0, 0.0])),
-	    camWhite = cam.fromXyz(xyz.fromRgb([1.0, 1.0, 1.0]));
+	var [ucsBlack, ucsWhite] = ["000", "fff"].map(function (hex) {
+		return ucs.fromCam(cam.fillOut(cfs("JhM"), cam.fromXyz(xyz.fromRgb(rgb.fromHex(hex)))));
+	});
 
 	function contains (CAM, epsilon=Number.EPSILON) {
 		var RGB = xyz.toRgb(cam.toXyz(CAM)),
@@ -14,27 +16,24 @@ function Gamut (xyz, cam) {
 		return [isInside, RGB];
 	}
 
-	function limit (inCam, outCam, cor="C", prec=1e-3) {
-		var inVal = inCam[cor],
-		    outVal = outCam[cor];
-		while (abs(inVal-outVal) > prec) {
-			var midVal = lerp(inVal, outVal, 0.5, cor),
-			    [isInside,] = contains(merge(inCam, {[cor]: midVal}));
+	function limit (inCam, outCam, prec=1e-3) {
+		var [inUcs, outUcs] = [inCam, outCam].map(function (CAM) {
+			return ucs.fromCam(cam.fillOut(cfs("JhM"), CAM));
+		});
+		while (ucs.distance(inUcs, outUcs) > prec) {
+			var midUcs = ucs.lerp(inUcs, outUcs, 0.5),
+			    [isInside,] = contains(ucs.toCam(midUcs));
 			if (isInside) {
-				inVal = midVal;
+				inUcs = midUcs;
 			} else {
-				outVal = midVal;
+				outUcs = midUcs;
 			}
 		}
-		return merge(inCam, {[cor]: inVal});
+		return cam.fillOut(map(inCam, v => true), ucs.toCam(inUcs));
 	}
 
 	function spine (t) {
-		var CAM = {};
-		for (var cor in camBlack) {
-			CAM[cor] = lerp(camBlack[cor], camWhite[cor], t, cor);
-		}
-		return CAM;
+		return cam.fillOut(cfs("JhC"), ucs.toCam(ucs.lerp(ucsBlack, ucsWhite, t)));
 	}
 
 	return {

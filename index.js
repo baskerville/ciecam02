@@ -5,12 +5,14 @@ var illuminant = require("./dist/illuminant"),
     xyz = require("./dist/xyz"),
     cam = require("./dist/cam"),
     ucs = require("./dist/ucs"),
+    cfs = require("./dist/helpers").cfs,
     hq = require("./dist/hq");
 
 module.exports = {
 	illuminant: illuminant,
 	workspace: workspace,
 	gamut: gamut,
+	cfs: cfs,
 	rgb: rgb,
 	xyz: xyz,
 	cam: cam,

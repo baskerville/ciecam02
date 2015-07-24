@@ -53,10 +53,19 @@ function Converter() {
 		return sqrt(pow((UCS1.J_p - UCS2.J_p) / K_L, 2) + pow(UCS1.a_p - UCS2.a_p, 2) + pow(UCS1.b_p - UCS2.b_p, 2));
 	}
 
+	function lerp(UCS1, UCS2, t) {
+		var UCS = {};
+		for (var cor in UCS1) {
+			UCS[cor] = (1 - t) * UCS1[cor] + t * UCS2[cor];
+		}
+		return UCS;
+	}
+
 	return {
 		fromCam: fromCam,
 		toCam: toCam,
-		distance: distance
+		distance: distance,
+		lerp: lerp
 	};
 }
 

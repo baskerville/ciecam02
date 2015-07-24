@@ -2,19 +2,19 @@
 
 var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; })();
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 var illuminant = require("./illuminant");
 var matrix = require("./matrix");
-var hq = require("./hq");
-var merge = require("mout/object/merge");
 
 var _require = require("./helpers");
 
-var degree = _require.degree;
-var radian = _require.radian;
+var cfs = _require.cfs;
+var hq = require("./hq");
+var merge = require("mout/object/merge");
+
+var _require2 = require("./helpers");
+
+var degree = _require2.degree;
+var radian = _require2.radian;
 var pow = Math.pow;
 var sqrt = Math.sqrt;
 var exp = Math.exp;
@@ -47,9 +47,8 @@ var defaultViewingConditions = {
 	discounting: false
 };
 
-var defaultCorrelates = merge.apply(undefined, _toConsumableArray("QJMCshH".split("").map(function (v) {
-	return _defineProperty({}, v, true);
-})));
+var defaultCorrelates = cfs("QJMCshH"),
+    vitalCorrelates = cfs("JCh");
 
 // CIECAM02 and Its Recent Developments - Ming Ronnier Luo and Changjun Li
 function Converter() {
@@ -234,7 +233,7 @@ function Converter() {
 	}
 
 	function toXyz(CAM) {
-		var _fillOut = fillOut({ J: 1, C: 1, h: 1 }, CAM);
+		var _fillOut = fillOut(vitalCorrelates, CAM);
 
 		var J = _fillOut.J;
 		var C = _fillOut.C;

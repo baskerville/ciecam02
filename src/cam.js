@@ -1,5 +1,6 @@
 var illuminant = require("./illuminant"),
     matrix = require("./matrix"),
+    {cfs} = require("./helpers"),
     hq = require("./hq"),
     merge = require("mout/object/merge"),
     {degree, radian} = require("./helpers"),
@@ -37,7 +38,8 @@ var defaultViewingConditions = {
 	discounting: false
 };
 
-var defaultCorrelates = merge(...("QJMCshH").split("").map(v => ({[v]: true})));
+var defaultCorrelates = cfs("QJMCshH"),
+    vitalCorrelates = cfs("JCh");
 
 // CIECAM02 and Its Recent Developments - Ming Ronnier Luo and Changjun Li
 function Converter (viewingConditions={}, correlates=defaultCorrelates) {
@@ -179,7 +181,7 @@ function Converter (viewingConditions={}, correlates=defaultCorrelates) {
 	}
 
 	function toXyz (CAM) {
-		var {J, C, h} = fillOut({J: 1, C: 1, h: 1}, CAM),
+		var {J, C, h} = fillOut(vitalCorrelates, CAM),
 		    h_rad = radian(h),
 		    t = pow(C / (sqrt(J / 100) * pow(1.64 - pow(0.29, n), 0.73)), 10 / 9),
 		    e_t = 1 / 4 * (cos(h_rad + 2) + 3.8),
