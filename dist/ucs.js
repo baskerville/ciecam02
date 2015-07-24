@@ -19,7 +19,7 @@ var uniformSpaces = {
 };
 
 function Converter() {
-	var name = arguments[0] === undefined ? "UCS" : arguments[0];
+	var name = arguments.length <= 0 || arguments[0] === undefined ? "UCS" : arguments[0];
 	var _uniformSpaces$name = uniformSpaces[name];
 	var K_L = _uniformSpaces$name.K_L;
 	var c_1 = _uniformSpaces$name.c_1;

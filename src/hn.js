@@ -18,8 +18,8 @@ module.exports = {
 			return letters[i] + p.toFixed() + letters[j];
 		}
 	},
-	toHue (n) {
-		var m = n.match(/^([a-z])(?:(.+)([a-z]))?$/),
+	toHue (N) {
+		var m = N.match(/^([a-z])(?:(.+)([a-z]))?$/),
 		    [H1, H2] = [m[1], m[3]].map(v => 100*letters.indexOf(v)),
 		    t = parseFloat(m[2]) / 100;
 		if (H2 < 0) {

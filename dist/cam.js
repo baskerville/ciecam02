@@ -52,8 +52,8 @@ var defaultCorrelates = cfs("QJMCshH"),
 
 // CIECAM02 and Its Recent Developments - Ming Ronnier Luo and Changjun Li
 function Converter() {
-	var viewingConditions = arguments[0] === undefined ? {} : arguments[0];
-	var correlates = arguments[1] === undefined ? defaultCorrelates : arguments[1];
+	var viewingConditions = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	var correlates = arguments.length <= 1 || arguments[1] === undefined ? defaultCorrelates : arguments[1];
 
 	viewingConditions = merge(defaultViewingConditions, viewingConditions);
 

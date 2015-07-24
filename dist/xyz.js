@@ -6,8 +6,8 @@ var matrix = require("./matrix"),
 
 // http://www.brucelindbloom.com/Eqn_RGB_XYZ_Matrix.html
 function Converter() {
-	var rgbSpace = arguments[0] === undefined ? workspace.sRGB : arguments[0];
-	var whitePoint = arguments[1] === undefined ? illuminant.D65 : arguments[1];
+	var rgbSpace = arguments.length <= 0 || arguments[0] === undefined ? workspace.sRGB : arguments[0];
+	var whitePoint = arguments.length <= 1 || arguments[1] === undefined ? illuminant.D65 : arguments[1];
 
 	var primaries = [rgbSpace.r, rgbSpace.g, rgbSpace.b];
 

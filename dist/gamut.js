@@ -21,7 +21,7 @@ function Gamut(xyz, cam) {
 	var ucsWhite = _map2[1];
 
 	function contains(CAM) {
-		var epsilon = arguments[1] === undefined ? Number.EPSILON : arguments[1];
+		var epsilon = arguments.length <= 1 || arguments[1] === undefined ? Number.EPSILON : arguments[1];
 
 		var RGB = xyz.toRgb(cam.toXyz(CAM)),
 		    zero = -epsilon,
@@ -35,7 +35,7 @@ function Gamut(xyz, cam) {
 	}
 
 	function limit(inCam, outCam) {
-		var prec = arguments[2] === undefined ? 1e-3 : arguments[2];
+		var prec = arguments.length <= 2 || arguments[2] === undefined ? 1e-3 : arguments[2];
 
 		var _map3 = [inCam, outCam].map(function (CAM) {
 			return ucs.fromCam(cam.fillOut(cfs("JhM"), CAM));

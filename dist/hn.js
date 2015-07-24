@@ -26,8 +26,8 @@ module.exports = {
 			return letters[i] + p.toFixed() + letters[j];
 		}
 	},
-	toHue: function toHue(n) {
-		var m = n.match(/^([a-z])(?:(.+)([a-z]))?$/);
+	toHue: function toHue(N) {
+		var m = N.match(/^([a-z])(?:(.+)([a-z]))?$/);
 
 		var _map = [m[1], m[3]].map(function (v) {
 			return 100 * letters.indexOf(v);
