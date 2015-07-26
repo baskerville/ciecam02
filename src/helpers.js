@@ -1,5 +1,6 @@
-var merge = require("mout/object/merge"),
-    {abs, PI} = Math;
+import {merge} from "mout/object";
+
+var {abs, PI} = Math;
 
 function degree (r) {
 	var a = r * 180 / PI;
@@ -40,9 +41,4 @@ function cfs (str) {
 	return merge(...str.split("").map(v => ({[v]: true})));
 }
 
-module.exports = {
-	degree: degree,
-	radian: radian,
-	lerp: lerp,
-	cfs: cfs
-};
+export {degree, radian, lerp, cfs};

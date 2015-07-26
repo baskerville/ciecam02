@@ -1,5 +1,8 @@
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
 var pow = Math.pow;
 
 var sRgbGamma = {
@@ -58,4 +61,5 @@ var workspaces = {
 	}
 };
 
-module.exports = workspaces;
+exports["default"] = workspaces;
+module.exports = exports["default"];

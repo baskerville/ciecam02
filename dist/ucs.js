@@ -1,9 +1,11 @@
 "use strict";
 
-var _require = require("./helpers");
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
 
-var degree = _require.degree;
-var radian = _require.radian;
+var _helpers = require("./helpers");
+
 var sqrt = Math.sqrt;
 var pow = Math.pow;
 var exp = Math.exp;
@@ -29,7 +31,7 @@ function Converter() {
 		var J = CAM.J;
 		var M = CAM.M;
 		var h = CAM.h;
-		var h_rad = radian(h);
+		var h_rad = (0, _helpers.radian)(h);
 		var J_p = (1 + 100 * c_1) * J / (1 + c_1 * J);
 		var M_p = 1 / c_2 * log(1 + c_2 * M);
 		var a_p = M_p * cos(h_rad);
@@ -45,7 +47,7 @@ function Converter() {
 		var M_p = sqrt(pow(a_p, 2) + pow(b_p, 2));
 		var M = (exp(c_2 * M_p) - 1) / c_2;
 		var h_rad = atan2(b_p, a_p);
-		var h = degree(h_rad);
+		var h = (0, _helpers.degree)(h_rad);
 		return { J: J, M: M, h: h };
 	}
 
@@ -69,4 +71,5 @@ function Converter() {
 	};
 }
 
-module.exports = Converter;
+exports["default"] = Converter;
+module.exports = exports["default"];

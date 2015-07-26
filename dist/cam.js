@@ -1,20 +1,31 @@
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
 var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; })();
 
-var illuminant = require("./illuminant");
-var matrix = require("./matrix");
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj["default"] = obj; return newObj; } }
 
-var _require = require("./helpers");
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-var cfs = _require.cfs;
-var hq = require("./hq");
-var merge = require("mout/object/merge");
+var _illuminant = require("./illuminant");
 
-var _require2 = require("./helpers");
+var _illuminant2 = _interopRequireDefault(_illuminant);
 
-var degree = _require2.degree;
-var radian = _require2.radian;
+var _matrix = require("./matrix");
+
+var matrix = _interopRequireWildcard(_matrix);
+
+var _hq = require("./hq");
+
+var hq = _interopRequireWildcard(_hq);
+
+var _helpers = require("./helpers");
+
+var _moutObject = require("mout/object");
+
 var pow = Math.pow;
 var sqrt = Math.sqrt;
 var exp = Math.exp;
@@ -40,22 +51,22 @@ var XYZ_to_CAT02 = M_CAT02,
     HPE_to_CAT02 = matrix.product(M_CAT02, matrix.inverse(M_HPE));
 
 var defaultViewingConditions = {
-	whitePoint: illuminant.D65,
+	whitePoint: _illuminant2["default"].D65,
 	adaptingLuminance: 40,
 	backgroundLuminance: 20,
 	surroundType: "average",
 	discounting: false
 };
 
-var defaultCorrelates = cfs("QJMCshH"),
-    vitalCorrelates = cfs("JCh");
+var defaultCorrelates = (0, _helpers.cfs)("QJMCshH"),
+    vitalCorrelates = (0, _helpers.cfs)("JCh");
 
 // CIECAM02 and Its Recent Developments - Ming Ronnier Luo and Changjun Li
 function Converter() {
 	var viewingConditions = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	var correlates = arguments.length <= 1 || arguments[1] === undefined ? defaultCorrelates : arguments[1];
 
-	viewingConditions = merge(defaultViewingConditions, viewingConditions);
+	viewingConditions = (0, _moutObject.merge)(defaultViewingConditions, viewingConditions);
 
 	var XYZ_w = viewingConditions.whitePoint;
 	var L_A = viewingConditions.adaptingLuminance;
@@ -222,7 +233,7 @@ function Converter() {
 		var a = R_a - G_a * 12 / 11 + B_a / 11,
 		    b = (R_a + G_a - 2 * B_a) / 9,
 		    h_rad = atan2(b, a),
-		    h = degree(h_rad),
+		    h = (0, _helpers.degree)(h_rad),
 		    e_t = 1 / 4 * (cos(h_rad + 2) + 3.8),
 		    A = achromaticResponse(RGB_a),
 		    J = 100 * pow(A / A_w, c * z),
@@ -238,7 +249,7 @@ function Converter() {
 		var J = _fillOut.J;
 		var C = _fillOut.C;
 		var h = _fillOut.h;
-		var h_rad = radian(h);
+		var h_rad = (0, _helpers.radian)(h);
 		var t = pow(C / (sqrt(J / 100) * pow(1.64 - pow(0.29, n), 0.73)), 10 / 9);
 		var e_t = 1 / 4 * (cos(h_rad + 2) + 3.8);
 		var A = A_w * pow(J / 100, 1 / c / z);
@@ -279,4 +290,5 @@ function Converter() {
 	};
 }
 
-module.exports = Converter;
+exports["default"] = Converter;
+module.exports = exports["default"];

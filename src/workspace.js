@@ -57,4 +57,4 @@ var workspaces = {
 	}
 };
 
-module.exports = workspaces;
+export default workspaces;

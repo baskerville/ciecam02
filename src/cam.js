@@ -1,10 +1,10 @@
-var illuminant = require("./illuminant"),
-    matrix = require("./matrix"),
-    {cfs} = require("./helpers"),
-    hq = require("./hq"),
-    merge = require("mout/object/merge"),
-    {degree, radian} = require("./helpers"),
-    {pow, sqrt, exp, abs, sign} = Math,
+import illuminant from "./illuminant";
+import * as matrix from "./matrix";
+import * as hq from "./hq";
+import {cfs, degree, radian} from "./helpers";
+import {merge} from "mout/object";
+
+var {pow, sqrt, exp, abs, sign} = Math,
     {sin, cos, atan2} = Math;
 
 var surrounds = {
@@ -227,4 +227,4 @@ function Converter (viewingConditions={}, correlates=defaultCorrelates) {
 	};
 }
 
-module.exports = Converter;
+export default Converter;

@@ -49,10 +49,4 @@ function product (M, N) {
 	);
 }
 
-module.exports = {
-	transpose: transpose,
-	inverse: inverse,
-	product: product,
-	multiply: multiply,
-	scalar: scalar
-};
+export {transpose, determinant, inverse, multiply, scalar, product};

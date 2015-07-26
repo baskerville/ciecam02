@@ -1,5 +1,6 @@
-var {degree, radian} = require("./helpers"),
-    {sqrt, pow, exp, log, cos, sin, atan2} = Math;
+import {degree, radian} from "./helpers";
+
+var {sqrt, pow, exp, log, cos, sin, atan2} = Math;
 
 var uniformSpaces = {
 	LCD: {K_L: 0.77, c_1: 0.007, c_2: 0.0053},
@@ -50,4 +51,4 @@ function Converter (name="UCS") {
 	};
 }
 
-module.exports = Converter;
+export default Converter;

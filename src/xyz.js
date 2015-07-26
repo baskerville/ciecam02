@@ -1,6 +1,6 @@
-var matrix = require("./matrix"),
-    illuminant = require("./illuminant"),
-    workspace = require("./workspace");
+import * as matrix from "./matrix";
+import illuminant from "./illuminant";
+import workspace from "./workspace";
 
 // http://www.brucelindbloom.com/Eqn_RGB_XYZ_Matrix.html
 function Converter (rgbSpace=workspace.sRGB, whitePoint=illuminant.D65) {
@@ -28,4 +28,4 @@ function Converter (rgbSpace=workspace.sRGB, whitePoint=illuminant.D65) {
 	};
 }
 
-module.exports = Converter;
+export default Converter;

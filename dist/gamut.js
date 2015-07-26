@@ -1,15 +1,28 @@
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
 var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; })();
 
-var ucs = require("./ucs")();
-var rgb = require("./rgb");
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-var _require = require("./helpers");
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj["default"] = obj; return newObj; } }
 
-var cfs = _require.cfs;
-var lerp = _require.lerp;
-var map = require("mout/object/map");
+var _rgb = require("./rgb");
+
+var rgb = _interopRequireWildcard(_rgb);
+
+var _ucs = require("./ucs");
+
+var _ucs2 = _interopRequireDefault(_ucs);
+
+var _helpers = require("./helpers");
+
+var _moutObject = require("mout/object");
+
+var ucs = (0, _ucs2["default"])();
 
 function Gamut(xyz, cam) {
 	var _map = ["000", "fff"].map(function (hex) {
@@ -39,7 +52,7 @@ function Gamut(xyz, cam) {
 		var prec = arguments.length <= 2 || arguments[2] === undefined ? 1e-3 : arguments[2];
 
 		var _map3 = [inCam, outCam].map(function (CAM) {
-			return ucs.fromCam(cam.fillOut(cfs("JhM"), CAM));
+			return ucs.fromCam(cam.fillOut((0, _helpers.cfs)("JhM"), CAM));
 		});
 
 		var _map32 = _slicedToArray(_map3, 2);
@@ -62,7 +75,7 @@ function Gamut(xyz, cam) {
 				outUcs = midUcs;
 			}
 		}
-		return cam.fillOut(map(inCam, function (v) {
+		return cam.fillOut((0, _moutObject.map)(inCam, function (v) {
 			return true;
 		}), ucs.toCam(inUcs));
 	}
@@ -70,7 +83,7 @@ function Gamut(xyz, cam) {
 	function spine(t) {
 		var CAM = {};
 		for (var cor in camBlack) {
-			CAM[cor] = lerp(camBlack[cor], camWhite[cor], t, cor);
+			CAM[cor] = (0, _helpers.lerp)(camBlack[cor], camWhite[cor], t, cor);
 		}
 		return CAM;
 	}
@@ -82,4 +95,5 @@ function Gamut(xyz, cam) {
 	};
 }
 
-module.exports = Gamut;
+exports["default"] = Gamut;
+module.exports = exports["default"];

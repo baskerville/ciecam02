@@ -1,4 +1,4 @@
-var map = require("mout/object/map");
+import {map} from "mout/object";
 
 // CIE 15-2004 Colorimetry, 3rd Edition
 var coordinates = {
@@ -17,4 +17,4 @@ var illuminants = map(coordinates, function (v) {
 	return [X, Y, Z];
 });
 
-module.exports = illuminants;
+export default illuminants;

@@ -2,6 +2,9 @@
 
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
 function transpose(M) {
 	return [[M[0][0], M[1][0], M[2][0]], [M[0][1], M[1][1], M[2][1]], [M[0][2], M[1][2], M[2][2]]];
 }
@@ -27,10 +30,9 @@ function product(M, N) {
 	return [[M[0][0] * N[0][0] + M[0][1] * N[1][0] + M[0][2] * N[2][0], M[0][0] * N[0][1] + M[0][1] * N[1][1] + M[0][2] * N[2][1], M[0][0] * N[0][2] + M[0][1] * N[1][2] + M[0][2] * N[2][2]], [M[1][0] * N[0][0] + M[1][1] * N[1][0] + M[1][2] * N[2][0], M[1][0] * N[0][1] + M[1][1] * N[1][1] + M[1][2] * N[2][1], M[1][0] * N[0][2] + M[1][1] * N[1][2] + M[1][2] * N[2][2]], [M[2][0] * N[0][0] + M[2][1] * N[1][0] + M[2][2] * N[2][0], M[2][0] * N[0][1] + M[2][1] * N[1][1] + M[2][2] * N[2][1], M[2][0] * N[0][2] + M[2][1] * N[1][2] + M[2][2] * N[2][2]]];
 }
 
-module.exports = {
-	transpose: transpose,
-	inverse: inverse,
-	product: product,
-	multiply: multiply,
-	scalar: scalar
-};
+exports.transpose = transpose;
+exports.determinant = determinant;
+exports.inverse = inverse;
+exports.multiply = multiply;
+exports.scalar = scalar;
+exports.product = product;

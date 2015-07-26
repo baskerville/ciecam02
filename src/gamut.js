@@ -1,7 +1,9 @@
-var ucs = require("./ucs")(),
-    rgb = require("./rgb"),
-    {cfs, lerp} = require("./helpers"),
-    map = require("mout/object/map");
+import * as rgb from "./rgb";
+import ucsConv from "./ucs";
+import {cfs, lerp} from "./helpers";
+import {map} from "mout/object";
+
+var ucs = ucsConv();
 
 function Gamut (xyz, cam) {
 	var [camBlack, camWhite] = ["000", "fff"].map(function (hex) {
@@ -47,4 +49,4 @@ function Gamut (xyz, cam) {
 	};
 }
 
-module.exports = Gamut;
+export default Gamut;
