@@ -1,11 +1,11 @@
 var ucs = require("./ucs")(),
     rgb = require("./rgb"),
-    {cfs} = require("./helpers"),
+    {cfs, lerp} = require("./helpers"),
     map = require("mout/object/map");
 
 function Gamut (xyz, cam) {
-	var [ucsBlack, ucsWhite] = ["000", "fff"].map(function (hex) {
-		return ucs.fromCam(cam.fillOut(cfs("JhM"), cam.fromXyz(xyz.fromRgb(rgb.fromHex(hex)))));
+	var [camBlack, camWhite] = ["000", "fff"].map(function (hex) {
+		return cam.fromXyz(xyz.fromRgb(rgb.fromHex(hex)));
 	});
 
 	function contains (CAM, epsilon=Number.EPSILON) {
@@ -33,7 +33,11 @@ function Gamut (xyz, cam) {
 	}
 
 	function spine (t) {
-		return cam.fillOut(cfs("JhC"), ucs.toCam(ucs.lerp(ucsBlack, ucsWhite, t)));
+		var CAM = {};
+		for (var cor in camBlack) {
+			CAM[cor] = lerp(camBlack[cor], camWhite[cor], t, cor);
+		}
+		return CAM;
 	}
 
 	return {

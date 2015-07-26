@@ -8,17 +8,18 @@ var rgb = require("./rgb");
 var _require = require("./helpers");
 
 var cfs = _require.cfs;
+var lerp = _require.lerp;
 var map = require("mout/object/map");
 
 function Gamut(xyz, cam) {
 	var _map = ["000", "fff"].map(function (hex) {
-		return ucs.fromCam(cam.fillOut(cfs("JhM"), cam.fromXyz(xyz.fromRgb(rgb.fromHex(hex)))));
+		return cam.fromXyz(xyz.fromRgb(rgb.fromHex(hex)));
 	});
 
 	var _map2 = _slicedToArray(_map, 2);
 
-	var ucsBlack = _map2[0];
-	var ucsWhite = _map2[1];
+	var camBlack = _map2[0];
+	var camWhite = _map2[1];
 
 	function contains(CAM) {
 		var epsilon = arguments.length <= 1 || arguments[1] === undefined ? Number.EPSILON : arguments[1];
@@ -67,7 +68,11 @@ function Gamut(xyz, cam) {
 	}
 
 	function spine(t) {
-		return cam.fillOut(cfs("JhC"), ucs.toCam(ucs.lerp(ucsBlack, ucsWhite, t)));
+		var CAM = {};
+		for (var cor in camBlack) {
+			CAM[cor] = lerp(camBlack[cor], camWhite[cor], t, cor);
+		}
+		return CAM;
 	}
 
 	return {
