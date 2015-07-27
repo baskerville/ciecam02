@@ -1,0 +1,14 @@
+html, body {
+	height: 100%;
+}
+
+body {
+	margin: 0;
+	background: black;
+	display: flex;
+	display: -webkit-flex;
+	align-items: center;
+	-webkit-align-items: center;
+	justify-content: center;
+	-webkit-justify-content: center;
+}
