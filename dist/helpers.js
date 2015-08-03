@@ -11,6 +11,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 var _moutObject = require("mout/object");
 
 var abs = Math.abs;
+var pow = Math.pow;
+var sqrt = Math.sqrt;
 var PI = Math.PI;
 
 function degree(r) {
@@ -33,7 +35,7 @@ var hueMax = {
 	H: 400
 };
 
-function lerp(a, b, t, cor) {
+function corLerp(a, b, t, cor) {
 	var m = hueMax[cor];
 	if (m) {
 		var d = abs(a - b);
@@ -48,6 +50,22 @@ function lerp(a, b, t, cor) {
 	return ((1 - t) * a + t * b) % (m || Infinity);
 }
 
+function lerp(start, end, t) {
+	var CAM = {};
+	for (var cor in start) {
+		CAM[cor] = corLerp(start[cor], end[cor], t, cor);
+	}
+	return CAM;
+}
+
+function distance(start, end) {
+	var d = 0;
+	for (var cor in start) {
+		d += pow(start[cor] - end[cor], 2);
+	}
+	return sqrt(d);
+}
+
 function cfs(str) {
 	return _moutObject.merge.apply(undefined, _toConsumableArray(str.split("").map(function (v) {
 		return _defineProperty({}, v, true);
@@ -56,5 +74,7 @@ function cfs(str) {
 
 exports.degree = degree;
 exports.radian = radian;
+exports.corLerp = corLerp;
 exports.lerp = lerp;
+exports.distance = distance;
 exports.cfs = cfs;

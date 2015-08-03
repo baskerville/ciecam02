@@ -1,6 +1,6 @@
 import {merge} from "mout/object";
 
-var {abs, PI} = Math;
+var {abs, pow, sqrt, PI} = Math;
 
 function degree (r) {
 	var a = r * 180 / PI;
@@ -22,7 +22,7 @@ var hueMax = {
        H: 400
 };
 
-function lerp(a, b, t, cor) {
+function corLerp(a, b, t, cor) {
 	var m = hueMax[cor];
 	if (m) {
 		var d = abs(a - b);
@@ -37,8 +37,24 @@ function lerp(a, b, t, cor) {
 	return ((1 - t) * a + t * b) % (m || Infinity);
 }
 
+function lerp (start, end, t) {
+	var CAM = {};
+	for (var cor in start) {
+		CAM[cor] = corLerp(start[cor], end[cor], t, cor);
+	}
+	return CAM;
+}
+
+function distance (start, end) {
+	var d = 0;
+	for (var cor in start) {
+		d += pow(start[cor]-end[cor], 2);
+	}
+	return sqrt(d);
+}
+
 function cfs (str) {
 	return merge(...str.split("").map(v => ({[v]: true})));
 }
 
-export {degree, radian, lerp, cfs};
+export {degree, radian, corLerp, lerp, distance, cfs};

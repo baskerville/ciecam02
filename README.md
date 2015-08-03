@@ -21,8 +21,7 @@ Converters:
 	ucs(name?="UCS") -> {
 		fromCam(CAM) -> UCS,
 		toCam(UCS) -> CAM,
-		distance(UCS1, UCS2) -> number,
-		lerp(UCS1, UCS2, t) -> UCS
+		distance(UCS1, UCS2) -> number
 	}
 
 	hq, hn: {
@@ -50,7 +49,8 @@ Gamut helpers:
 
 Misc helpers:
 
-	cfs(str) -> correlates
+	cfs(str) -> correlates,
+	lerp(CAM1, CAM2, t) -> CAM
 
 # Example
 
@@ -100,7 +100,7 @@ var camSand = hexToCam("e0cda9"),                       // {J: 77.82, C: 16.99, 
 if (!isInside) {
 	// The gamut.limit function interpolates between an inside and an outside point
 	// and return an inside point as close as possible to the boundary.
-	let camOrange1 = gamut.limit(camSand, camOrange),            // {J: 77.82, C: 55.22, h: 81.01}
+	let camOrange1 = gamut.limit(camSand, camOrange),            // {J: 77.82, C: 55.23, h: 81.01}
 	    // The naïve method might cause significant changes to the lightness and hue correlates
 	    camOrange2 = cam.fromXyz(xyz.fromRgb(crop(rgbOrange)));  // {J: 74.43, C: 67.60, h: 81.30}
 	console.log([camOrange1, camOrange2].map(camToHex));         // #ffc447   #ffb900

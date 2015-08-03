@@ -1,5 +1,5 @@
 import * as hq from "./hq";
-import {lerp} from "./helpers";
+import {corLerp} from "./helpers";
 
 var {floor} = Math,
     uniqueSymbols = "rygb";
@@ -28,7 +28,7 @@ function toHue (N) {
 		H2 = H1;
 		t = 0;
 	}
-	return hq.toHue(lerp(H1, H2, t, "H"));
+	return hq.toHue(corLerp(H1, H2, t, "H"));
 }
 
 export {fromHue, toHue};

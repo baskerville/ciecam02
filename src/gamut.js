@@ -1,9 +1,5 @@
 import * as rgb from "./rgb";
-import ucsConv from "./ucs";
-import {cfs, lerp} from "./helpers";
-import {map} from "mout/object";
-
-var ucs = ucsConv();
+import {lerp, distance} from "./helpers";
 
 function Gamut (xyz, cam) {
 	var [camBlack, camWhite] = ["000", "fff"].map(function (hex) {
@@ -19,27 +15,20 @@ function Gamut (xyz, cam) {
 	}
 
 	function limit (inCam, outCam, prec=1e-3) {
-		var [inUcs, outUcs] = [inCam, outCam].map(function (CAM) {
-			return ucs.fromCam(cam.fillOut(cfs("JhM"), CAM));
-		});
-		while (ucs.distance(inUcs, outUcs) > prec) {
-			var midUcs = ucs.lerp(inUcs, outUcs, 0.5),
-			    [isInside,] = contains(ucs.toCam(midUcs));
+		while (distance(inCam, outCam) > prec) {
+			var midCam = lerp(inCam, outCam, 0.5),
+			    [isInside,] = contains(midCam);
 			if (isInside) {
-				inUcs = midUcs;
+				inCam = midCam;
 			} else {
-				outUcs = midUcs;
+				outCam = midCam;
 			}
 		}
-		return cam.fillOut(map(inCam, v => true), ucs.toCam(inUcs));
+		return inCam;
 	}
 
 	function spine (t) {
-		var CAM = {};
-		for (var cor in camBlack) {
-			CAM[cor] = lerp(camBlack[cor], camWhite[cor], t, cor);
-		}
-		return CAM;
+		return lerp(camBlack, camWhite, t);
 	}
 
 	return {

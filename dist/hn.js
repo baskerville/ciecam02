@@ -52,7 +52,7 @@ function toHue(N) {
 		H2 = H1;
 		t = 0;
 	}
-	return hq.toHue((0, _helpers.lerp)(H1, H2, t, "H"));
+	return hq.toHue((0, _helpers.corLerp)(H1, H2, t, "H"));
 }
 
 exports.fromHue = fromHue;
