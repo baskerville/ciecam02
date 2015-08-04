@@ -52,7 +52,9 @@ Misc helpers:
 	cfs(str) -> correlates,
 	lerp(CAM1, CAM2, t) -> CAM
 
-# Example
+# Examples
+
+## Getting back into the gamut
 
 ```javascript
 // The reference for understanding CIECAM02 is:
@@ -87,10 +89,8 @@ function camToHex(CAM) {
 	return rgb.toHex(xyz.toRgb(cam.toXyz(CAM)));
 }
 
-// This is a naïve method for getting back inside the gamut.
-// (The gamut is the set of CAM values that maps to valid RGB coordinates.)
-function crop (RGB) {
-	return RGB.map(v => max(0, min(1, v)));
+function crop (v) {
+	return max(0, min(1, v));
 }
 
 var camSand = hexToCam("e0cda9"),                       // {J: 77.82, C: 16.99, h: 81.01}
@@ -100,11 +100,37 @@ var camSand = hexToCam("e0cda9"),                       // {J: 77.82, C: 16.99, 
 if (!isInside) {
 	// The gamut.limit function interpolates between an inside and an outside point
 	// and return an inside point as close as possible to the boundary.
-	let camOrange1 = gamut.limit(camSand, camOrange),            // {J: 77.82, C: 55.23, h: 81.01}
-	    // The naïve method might cause significant changes to the lightness and hue correlates
-	    camOrange2 = cam.fromXyz(xyz.fromRgb(crop(rgbOrange)));  // {J: 74.43, C: 67.60, h: 81.30}
-	console.log([camOrange1, camOrange2].map(camToHex));         // #ffc447   #ffb900
+	// (The gamut is the set of CAM values that maps to valid RGB coordinates.)
+	let camOrange1 = gamut.limit(camSand, camOrange),                // {J: 77.82, C: 55.23, h: 81.01}
+	// The alternative method is to simply crop the RGB coordinates
+	    camOrange2 = cam.fromXyz(xyz.fromRgb(rgbOrange.map(crop)));  // {J: 74.43, C: 67.60, h: 81.30}
+	console.log([camOrange1, camOrange2].map(camToHex));             // #ffc447   #ffb900
 } else {
 	console.log(rgb.toHex(rgbOrange));
 }
 ```
+
+![Example 1 Output](img/ex1.png)
+
+## Gradient
+
+```javascript
+
+var {lerp} = ciecam02,
+    camStart = hexToCam("17657d"),
+    camEnd = hexToCam("fee7f0");
+
+function gradient (camStart, camEnd, steps=3) {
+	var result = [];
+	for (var ε = 1/(steps+1), t = 0; steps > -2; t += ε, steps -= 1) {
+		let camBetween = lerp(camStart, camEnd, crop(t)),
+		    hex = rgb.toHex(xyz.toRgb(cam.toXyz(camBetween)).map(crop));
+		result.push(hex);
+	}
+	return result;
+}
+
+var hexCodes = gradient(camStart, camEnd, 8);
+```
+
+![Example 2 Output](img/ex2.png)
