@@ -25,7 +25,7 @@ function Gamut(xyz, cam) {
 	var camWhite = _map2[1];
 
 	function contains(CAM) {
-		var epsilon = arguments.length <= 1 || arguments[1] === undefined ? Number.EPSILON : arguments[1];
+		var epsilon = arguments.length <= 1 || arguments[1] === undefined ? 1e-6 : arguments[1];
 
 		var RGB = xyz.toRgb(cam.toXyz(CAM)),
 		    zero = -epsilon,

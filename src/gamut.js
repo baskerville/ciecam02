@@ -6,7 +6,7 @@ function Gamut (xyz, cam) {
 		return cam.fromXyz(xyz.fromRgb(rgb.fromHex(hex)));
 	});
 
-	function contains (CAM, epsilon=Number.EPSILON) {
+	function contains (CAM, epsilon=1e-6) {
 		var RGB = xyz.toRgb(cam.toXyz(CAM)),
 		    zero = -epsilon,
 		    one = 1 + epsilon,

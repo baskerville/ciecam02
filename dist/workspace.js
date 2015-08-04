@@ -26,10 +26,10 @@ var proPhotoGamma = {
 function simpleGamma(g) {
 	return {
 		decode: function decode(v) {
-			return pow(v, g);
+			return v < 0 ? -pow(-v, g) : pow(v, g);
 		},
 		encode: function encode(v) {
-			return pow(v, 1 / g);
+			return v < 0 ? -pow(-v, 1 / g) : pow(v, 1 / g);
 		}
 	};
 }
