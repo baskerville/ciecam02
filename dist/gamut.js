@@ -15,6 +15,11 @@ var rgb = _interopRequireWildcard(_rgb);
 var _helpers = require("./helpers");
 
 function Gamut(xyz, cam) {
+	var epsilon = arguments.length <= 2 || arguments[2] === undefined ? 1e-6 : arguments[2];
+
+	var ZERO = -epsilon,
+	    ONE = 1 + epsilon;
+
 	var _map = ["000", "fff"].map(function (hex) {
 		return cam.fromXyz(xyz.fromRgb(rgb.fromHex(hex)));
 	});
@@ -25,13 +30,9 @@ function Gamut(xyz, cam) {
 	var camWhite = _map2[1];
 
 	function contains(CAM) {
-		var epsilon = arguments.length <= 1 || arguments[1] === undefined ? 1e-6 : arguments[1];
-
 		var RGB = xyz.toRgb(cam.toXyz(CAM)),
-		    zero = -epsilon,
-		    one = 1 + epsilon,
 		    isInside = RGB.map(function (v) {
-			return v >= zero && v <= one;
+			return v >= ZERO && v <= ONE;
 		}).reduce(function (a, b) {
 			return a && b;
 		});

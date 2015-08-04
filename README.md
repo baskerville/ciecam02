@@ -1,6 +1,6 @@
 # API
 
-Converters:
+## Converters
 
 	rgb: {
 		fromHex(hex) -> RGB,
@@ -29,7 +29,7 @@ Converters:
 		toHue(H) -> h
 	}
 
-Default viewing conditions:
+## Default viewing conditions
 
 	{
 		whitePoint: illuminant.D65,
@@ -39,15 +39,15 @@ Default viewing conditions:
 		discounting: false
 	}
 
-Gamut helpers:
+## Gamut helpers
 
-	gamut(xyz, cam) -> {
-		contains(CAM, epsilon?=Number.EPSILON) -> (boolean, RGB),
+	gamut(xyz, cam, epsilon?=Number.EPSILON) -> {
+		contains(CAM) -> (boolean, RGB),
 		limit(inCam, outCam, prec?=1e-3) -> CAM,
 		spine(t) -> CAM
 	}
 
-Misc helpers:
+## Misc helpers
 
 	cfs(str) -> correlates,
 	lerp(CAM1, CAM2, t) -> CAM

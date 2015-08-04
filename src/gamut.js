@@ -1,16 +1,16 @@
 import * as rgb from "./rgb";
 import {lerp, distance} from "./helpers";
 
-function Gamut (xyz, cam) {
+function Gamut (xyz, cam, epsilon=1e-6) {
+	var ZERO = -epsilon,
+	    ONE = 1 + epsilon;
 	var [camBlack, camWhite] = ["000", "fff"].map(function (hex) {
 		return cam.fromXyz(xyz.fromRgb(rgb.fromHex(hex)));
 	});
 
-	function contains (CAM, epsilon=1e-6) {
+	function contains (CAM) {
 		var RGB = xyz.toRgb(cam.toXyz(CAM)),
-		    zero = -epsilon,
-		    one = 1 + epsilon,
-		    isInside = RGB.map(v => (v >= zero && v <= one)).reduce((a, b) => a && b);
+		    isInside = RGB.map(v => (v >= ZERO && v <= ONE)).reduce((a, b) => a && b);
 		return [isInside, RGB];
 	}
 
