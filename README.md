@@ -43,7 +43,7 @@
 
 	gamut(xyz, cam, epsilon?=1e-6) -> {
 		contains(CAM) -> (boolean, RGB),
-		limit(inCam, outCam, prec?=1e-3) -> CAM,
+		limit(camIn, camOut, prec?=1e-3) -> CAM,
 		spine(t) -> CAM
 	}
 

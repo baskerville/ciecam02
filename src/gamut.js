@@ -14,17 +14,17 @@ function Gamut (xyz, cam, epsilon=1e-6) {
 		return [isInside, RGB];
 	}
 
-	function limit (inCam, outCam, prec=1e-3) {
-		while (distance(inCam, outCam) > prec) {
-			var midCam = lerp(inCam, outCam, 0.5),
-			    [isInside,] = contains(midCam);
+	function limit (camIn, camOut, prec=1e-3) {
+		while (distance(camIn, camOut) > prec) {
+			var camMid = lerp(camIn, camOut, 0.5),
+			    [isInside,] = contains(camMid);
 			if (isInside) {
-				inCam = midCam;
+				camIn = camMid;
 			} else {
-				outCam = midCam;
+				camOut = camMid;
 			}
 		}
-		return inCam;
+		return camIn;
 	}
 
 	function spine (t) {

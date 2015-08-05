@@ -39,25 +39,25 @@ function Gamut(xyz, cam) {
 		return [isInside, RGB];
 	}
 
-	function limit(inCam, outCam) {
+	function limit(camIn, camOut) {
 		var prec = arguments.length <= 2 || arguments[2] === undefined ? 1e-3 : arguments[2];
 
-		while ((0, _helpers.distance)(inCam, outCam) > prec) {
-			var midCam = (0, _helpers.lerp)(inCam, outCam, 0.5);
+		while ((0, _helpers.distance)(camIn, camOut) > prec) {
+			var camMid = (0, _helpers.lerp)(camIn, camOut, 0.5);
 
-			var _contains = contains(midCam);
+			var _contains = contains(camMid);
 
 			var _contains2 = _slicedToArray(_contains, 1);
 
 			var isInside = _contains2[0];
 
 			if (isInside) {
-				inCam = midCam;
+				camIn = camMid;
 			} else {
-				outCam = midCam;
+				camOut = camMid;
 			}
 		}
-		return inCam;
+		return camIn;
 	}
 
 	function spine(t) {
