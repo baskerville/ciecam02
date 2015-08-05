@@ -134,3 +134,40 @@ var hexCodes = gradient(camStart, camEnd, 8);
 ```
 
 ![Example 2 Output](img/ex2.png)
+
+## Chroma maximization
+
+```javascript
+import {map} from "mout/object";
+
+var {hn} = ciecam02,
+    ucs = ciecam02.ucs();
+
+function ucsLimit (camIn, camOut, prec=1e-3) {
+	var [ucsIn, ucsOut] = [camIn, camOut].map(v => ucs.fromCam(cam.fillOut(cfs("JMh"), v)));
+	while (ucs.distance(ucsIn, ucsOut) > prec) {
+		let ucsMid = lerp(ucsIn, ucsOut, 0.5),
+		    [isInside,] = gamut.contains(ucs.toCam(ucsMid));
+		if (isInside) {
+			ucsIn = ucsMid;
+		} else {
+			ucsOut = ucsMid;
+		}
+	}
+	return cam.fillOut(map(camIn, v => true), ucs.toCam(ucsIn));
+}
+
+var topChroma = max(...["f00", "0f0", "00f"].map(v => hexToCam(v).C)),
+    camRed = {J: 60, h: hn.toHue("r")},
+    camYellow = {J: 90, h: hn.toHue("y")},
+    camGreen = {J: 90, h: hn.toHue("g")},
+    camBlue = {J: 70, h: hn.toHue("b")};
+
+var hexCodes = [camRed, camYellow, camGreen, camBlue].map(function (CAM) {
+	CAM = merge(CAM, {C: topChroma+1});
+	CAM = ucsLimit(gamut.spine(CAM.J/100), CAM);
+	return camToHex(CAM);
+});
+```
+
+![Example 3 Output](img/ex3.png)
