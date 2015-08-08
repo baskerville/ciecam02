@@ -24,9 +24,14 @@
 		distance(UCS1, UCS2) -> number
 	}
 
-	hq, hn: {
+	hq: {
 		fromHue(h) -> H,
 		toHue(H) -> h
+	}
+
+	hn: {
+		fromHue(h) -> N,
+		toHue(N) -> h
 	}
 
 ## Default viewing conditions
