@@ -4,6 +4,8 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 var pow = Math.pow;
+var sign = Math.sign;
+var abs = Math.abs;
 
 var sRgbGamma = {
 	decode: function decode(v) {
@@ -26,10 +28,10 @@ var proPhotoGamma = {
 function simpleGamma(g) {
 	return {
 		decode: function decode(v) {
-			return v < 0 ? -pow(-v, g) : pow(v, g);
+			return sign(v) * pow(abs(v), g);
 		},
 		encode: function encode(v) {
-			return v < 0 ? -pow(-v, 1 / g) : pow(v, 1 / g);
+			return sign(v) * pow(abs(v), 1 / g);
 		}
 	};
 }

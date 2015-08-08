@@ -1,4 +1,4 @@
-var {pow} = Math;
+var {pow, sign, abs} = Math;
 
 var sRgbGamma = {
 	decode (v) {
@@ -22,10 +22,10 @@ var proPhotoGamma = {
 function simpleGamma (g) {
 	return {
 		decode (v) {
-			return (v < 0 ? -pow(-v, g) : pow(v, g));
+			return sign(v) * pow(abs(v), g);
 		},
 		encode (v) {
-			return (v < 0 ? -pow(-v, 1/g) : pow(v, 1/g));
+			return sign(v) * pow(abs(v), 1/g);
 		}
 	};
 }
