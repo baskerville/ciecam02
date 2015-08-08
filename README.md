@@ -26,12 +26,9 @@
 
 	hq: {
 		fromHue(h) -> H,
-		toHue(H) -> h
-	}
-
-	hn: {
-		fromHue(h) -> N,
-		toHue(N) -> h
+		toHue(H) -> h,
+		fromNotation(N) -> H,
+		toNotation(H) -> N
 	}
 
 ## Default viewing conditions
@@ -145,7 +142,7 @@ var hexCodes = gradient(camStart, camEnd, 8);
 ```javascript
 import {map} from "mout/object";
 
-var {hn} = ciecam02,
+var {hq} = ciecam02,
     ucs = ciecam02.ucs();
 
 function ucsLimit (camIn, camOut, prec=1e-3) {
@@ -162,11 +159,15 @@ function ucsLimit (camIn, camOut, prec=1e-3) {
 	return cam.fillOut(map(camIn, v => true), ucs.toCam(ucsIn));
 }
 
+function hue (N) {
+	return hq.toHue(hq.fromNotation(N));
+}
+
 var topChroma = max(...["f00", "0f0", "00f"].map(v => hexToCam(v).C)),
-    camRed = {J: 60, h: hn.toHue("r")},
-    camYellow = {J: 90, h: hn.toHue("y")},
-    camGreen = {J: 90, h: hn.toHue("g")},
-    camBlue = {J: 70, h: hn.toHue("b")};
+    camRed = {J: 60, h: hue("R")},
+    camYellow = {J: 90, h: hue("Y")},
+    camGreen = {J: 90, h: hue("G")},
+    camBlue = {J: 70, h: hue("B")};
 
 var hexCodes = [camRed, camYellow, camGreen, camBlue].map(function (CAM) {
 	CAM = merge(CAM, {C: topChroma+1});

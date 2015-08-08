@@ -1,3 +1,5 @@
+import {corLerp} from "./helpers";
+
 var {floor} = Math;
 
 var uniqueHues = [
@@ -7,6 +9,8 @@ var uniqueHues = [
 	{s: "B", h: 237.53, e: 1.2, H: 300},
 	{s: "R", h: 380.14, e: 0.8, H: 400}
 ];
+
+var hueSymbols = uniqueHues.map(v => v.s).slice(0, -1).join("");
 
 function fromHue (h) {
 	if (h < uniqueHues[0].h) {
@@ -30,4 +34,32 @@ function toHue (H) {
 	return h;
 }
 
-export {fromHue, toHue};
+function fromNotation (N) {
+	var [, H1, P, H2] = N.match(/^([a-z])(?:(.+)?([a-z]))?$/i);
+	if (H2 === undefined) {
+		H2 = H1;
+	}
+	if (P === undefined) {
+		P = "50";
+	}
+	[H1, H2] = [H1, H2].map(v => 100*hueSymbols.indexOf(v.toUpperCase()));
+	P = parseFloat(P) / 100;
+	return corLerp(H1, H2, P, "H");
+}
+
+function toNotation (H) {
+	var i = floor(H / 100),
+	    j = (i + 1) % hueSymbols.length,
+	    p = (H - i * 100);
+	if (p > 50) {
+		[i, j] = [j, i];
+		p = 100 - p;
+	}
+	if (p < 1) {
+		return hueSymbols[i];
+	} else {
+		return hueSymbols[i] + p.toFixed() + hueSymbols[j];
+	}
+}
+
+export {fromHue, toHue, fromNotation, toNotation};

@@ -7,7 +7,6 @@ var CamConv = require("../dist/cam"),
 describe("Roundtrips", function () {
 	var rgb = require("../dist/rgb"),
 	    hq = require("../dist/hq"),
-	    hn = require("../dist/hn"),
 	    xyz = XyzConv(),
 	    cam = CamConv(),
 	    ucs = UcsConv(),
@@ -38,12 +37,10 @@ describe("Roundtrips", function () {
 		assert.closeTo(CAM.h, rCAM.h, ε);
 	});
 	it("Hq", function () {
-		var h = 237;
+		var h = 237,
+		    N = "R46B";
 		assert.closeTo(h, hq.toHue(hq.fromHue(h)), ε);
-	});
-	it("Hn", function () {
-		var N = "r46b";
-		assert.equal(N, hn.fromHue(hn.toHue(N)));
+		assert.equal(N, hq.toNotation(hq.fromNotation(N)));
 	});
 });
 

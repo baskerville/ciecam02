@@ -6,9 +6,15 @@ Object.defineProperty(exports, "__esModule", {
 
 var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; })();
 
+var _helpers = require("./helpers");
+
 var floor = Math.floor;
 
 var uniqueHues = [{ s: "R", h: 20.14, e: 0.8, H: 0 }, { s: "Y", h: 90.00, e: 0.7, H: 100 }, { s: "G", h: 164.25, e: 1.0, H: 200 }, { s: "B", h: 237.53, e: 1.2, H: 300 }, { s: "R", h: 380.14, e: 0.8, H: 400 }];
+
+var hueSymbols = uniqueHues.map(function (v) {
+	return v.s;
+}).slice(0, -1).join("");
 
 function fromHue(h) {
 	if (h < uniqueHues[0].h) {
@@ -42,5 +48,54 @@ function toHue(H) {
 	return h;
 }
 
+function fromNotation(N) {
+	var _N$match = N.match(/^([a-z])(?:(.+)?([a-z]))?$/i);
+
+	var _N$match2 = _slicedToArray(_N$match, 4);
+
+	var H1 = _N$match2[1];
+	var P = _N$match2[2];
+	var H2 = _N$match2[3];
+
+	if (H2 === undefined) {
+		H2 = H1;
+	}
+	if (P === undefined) {
+		P = "50";
+	}
+
+	var _map = [H1, H2].map(function (v) {
+		return 100 * hueSymbols.indexOf(v.toUpperCase());
+	});
+
+	var _map2 = _slicedToArray(_map, 2);
+
+	H1 = _map2[0];
+	H2 = _map2[1];
+
+	P = parseFloat(P) / 100;
+	return (0, _helpers.corLerp)(H1, H2, P, "H");
+}
+
+function toNotation(H) {
+	var i = floor(H / 100),
+	    j = (i + 1) % hueSymbols.length,
+	    p = H - i * 100;
+	if (p > 50) {
+		var _ref = [j, i];
+		i = _ref[0];
+		j = _ref[1];
+
+		p = 100 - p;
+	}
+	if (p < 1) {
+		return hueSymbols[i];
+	} else {
+		return hueSymbols[i] + p.toFixed() + hueSymbols[j];
+	}
+}
+
 exports.fromHue = fromHue;
 exports.toHue = toHue;
+exports.fromNotation = fromNotation;
+exports.toNotation = toNotation;
