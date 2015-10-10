@@ -1,11 +1,11 @@
 var CamConv = require("../dist/cam"),
-    XyzConv = require("../dist/xyz"),
+    XyzConv = require("ciebase").xyz,
     UcsConv = require("../dist/ucs"),
     assert = require('chai').assert,
     ε = 0.05;
 
 describe("Roundtrips", function () {
-	var rgb = require("../dist/rgb"),
+	var rgb = require("ciebase").rgb,
 	    hq = require("../dist/hq"),
 	    xyz = XyzConv(),
 	    cam = CamConv(),
@@ -15,15 +15,6 @@ describe("Roundtrips", function () {
 	    XYZ = xyz.fromRgb(RGB),
 	    CAM = cam.fromXyz(XYZ),
 	    UCS = ucs.fromCam(CAM);
-	it("Rgb", function () {
-		assert.equal(hex, rgb.toHex(RGB));
-	});
-	it("Xyz", function () {
-		var rRGB = xyz.toRgb(XYZ);
-		assert.closeTo(RGB[0], rRGB[0], ε);
-		assert.closeTo(RGB[1], rRGB[1], ε);
-		assert.closeTo(RGB[2], rRGB[2], ε);
-	});
 	it("Cam", function () {
 		var rXYZ = cam.toXyz(CAM);
 		assert.closeTo(XYZ[0], rXYZ[0], ε);

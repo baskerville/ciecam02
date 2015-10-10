@@ -1,4 +1,4 @@
-import * as rgb from "./rgb";
+import {rgb} from "ciebase";
 import {lerp, distance} from "./helpers";
 
 function Gamut (xyz, cam, epsilon=1e-6) {

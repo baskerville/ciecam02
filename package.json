@@ -1,6 +1,6 @@
 {
   "name": "ciecam02",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "An implementation of CIECAM02",
   "scripts": {
     "test": "mocha"
@@ -22,6 +22,7 @@
   "bugs": "https://github.com/baskerville/ciecam02/issues",
   "homepage": "https://github.com/baskerville/ciecam02",
   "dependencies": {
+    "ciebase": "*",
     "mout": "*"
   }
 }

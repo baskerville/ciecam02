@@ -2,16 +2,6 @@
 
 ## Converters
 
-	rgb: {
-		fromHex(hex) -> RGB,
-		toHex(RGB) -> hex
-	}
-
-	xyz(rgbSpace?=workspace.sRGB, whitePoint?=illuminant.D65) -> {
-		fromRgb(RGB) -> XYZ,
-		toRgb(XYZ) -> RGB
-	}
-
 	cam(viewingConditions?, correlates?) -> {
 		fromXyz(XYZ) -> CAM,
 		toXyz(CAM) -> XYZ,
@@ -62,11 +52,13 @@
 // The reference for understanding CIECAM02 is:
 // http://www.springer.com/cda/content/document/cda_downloaddocument/9781441961891-c1.pdf
 
+import * as ciebase from "ciebase";
 import * as ciecam02 from "ciecam02";
 import {merge} from "mout/object";
 
-var {cfs, rgb, workspace, illuminant} = ciecam02,
-    xyz = ciecam02.xyz(workspace.sRGB, illuminant.D65);
+var {rgb, workspace, illuminant} = ciebase,
+    {cfs} = ciecam02,
+    xyz = ciebase.xyz(workspace.sRGB, illuminant.D65);
 
 var viewingConditions = {
 	whitePoint: illuminant.D65,
@@ -146,6 +138,7 @@ var {hq} = ciecam02,
     ucs = ciecam02.ucs();
 
 function ucsLimit (camIn, camOut, prec=1e-3) {
+	// UCS is based on the JMh correlates
 	var [ucsIn, ucsOut] = [camIn, camOut].map(v => ucs.fromCam(cam.fillOut(cfs("JMh"), v)));
 	while (ucs.distance(ucsIn, ucsOut) > prec) {
 		let ucsMid = lerp(ucsIn, ucsOut, 0.5),
@@ -159,6 +152,9 @@ function ucsLimit (camIn, camOut, prec=1e-3) {
 	return cam.fillOut(map(camIn, v => true), ucs.toCam(ucsIn));
 }
 
+// The hue notation is a different writting of the hue quadrant,
+// of the form a(p?b)? where a and b are in {R, Y, G, B} (a ≠ b)
+// and p is in ]0, 100[. apb = b(100-p)a, ab = a50b.
 function hue (N) {
 	return hq.toHue(hq.fromNotation(N));
 }

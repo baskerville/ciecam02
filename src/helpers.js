@@ -1,21 +1,6 @@
 import {merge} from "mout/object";
 
-var {abs, pow, sqrt, PI} = Math;
-
-function degree (r) {
-	var a = r * 180 / PI;
-	while (a < 0) {
-		a += 360;
-	}
-	while (a > 360) {
-		a -= 360;
-	}
-	return a;
-}
-
-function radian (d) {
-	return PI * d / 180;
-}
+var {abs, pow, sqrt} = Math;
 
 var hueMax = {
        h: 360,
@@ -57,4 +42,4 @@ function cfs (str) {
 	return merge(...str.split("").map(v => ({[v]: true})));
 }
 
-export {degree, radian, corLerp, lerp, distance, cfs};
+export {corLerp, lerp, distance, cfs};

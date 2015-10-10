@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _helpers = require("./helpers");
+var _ciebase = require("ciebase");
 
 var sqrt = Math.sqrt;
 var pow = Math.pow;
@@ -31,7 +31,7 @@ function Converter() {
 		var J = CAM.J;
 		var M = CAM.M;
 		var h = CAM.h;
-		var h_rad = (0, _helpers.radian)(h);
+		var h_rad = _ciebase.degree.toRadian(h);
 		var J_p = (1 + 100 * c_1) * J / (1 + c_1 * J);
 		var M_p = 1 / c_2 * log(1 + c_2 * M);
 		var a_p = M_p * cos(h_rad);
@@ -47,7 +47,7 @@ function Converter() {
 		var M_p = sqrt(pow(a_p, 2) + pow(b_p, 2));
 		var M = (exp(c_2 * M_p) - 1) / c_2;
 		var h_rad = atan2(b_p, a_p);
-		var h = (0, _helpers.degree)(h_rad);
+		var h = _ciebase.degree.fromRadian(h_rad);
 		return { J: J, M: M, h: h };
 	}
 

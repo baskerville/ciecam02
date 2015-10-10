@@ -13,22 +13,6 @@ var _moutObject = require("mout/object");
 var abs = Math.abs;
 var pow = Math.pow;
 var sqrt = Math.sqrt;
-var PI = Math.PI;
-
-function degree(r) {
-	var a = r * 180 / PI;
-	while (a < 0) {
-		a += 360;
-	}
-	while (a > 360) {
-		a -= 360;
-	}
-	return a;
-}
-
-function radian(d) {
-	return PI * d / 180;
-}
 
 var hueMax = {
 	h: 360,
@@ -72,8 +56,6 @@ function cfs(str) {
 	})));
 }
 
-exports.degree = degree;
-exports.radian = radian;
 exports.corLerp = corLerp;
 exports.lerp = lerp;
 exports.distance = distance;

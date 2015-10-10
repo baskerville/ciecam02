@@ -1,7 +1,6 @@
-import illuminant from "./illuminant";
-import * as matrix from "./matrix";
+import {illuminant, matrix, degree} from "ciebase";
 import * as hq from "./hq";
-import {cfs, degree, radian} from "./helpers";
+import {cfs} from "./helpers";
 import {merge} from "mout/object";
 
 var {pow, sqrt, exp, abs, sign} = Math,
@@ -170,7 +169,7 @@ function Converter (viewingConditions={}, correlates=defaultCorrelates) {
 		var a = R_a - G_a * 12 / 11 + B_a / 11,
 		    b = (R_a + G_a - 2 * B_a) / 9,
 		    h_rad = atan2(b, a),
-		    h = degree(h_rad),
+		    h = degree.fromRadian(h_rad),
 		    e_t = 1/4 * (cos(h_rad + 2) + 3.8),
 		    A = achromaticResponse(RGB_a),
 		    J = 100 * pow(A / A_w, c * z),
@@ -182,7 +181,7 @@ function Converter (viewingConditions={}, correlates=defaultCorrelates) {
 
 	function toXyz (CAM) {
 		var {J, C, h} = fillOut(vitalCorrelates, CAM),
-		    h_rad = radian(h),
+		    h_rad = degree.toRadian(h),
 		    t = pow(C / (sqrt(J / 100) * pow(1.64 - pow(0.29, n), 0.73)), 10 / 9),
 		    e_t = 1 / 4 * (cos(h_rad + 2) + 3.8),
 		    A = A_w * pow(J / 100, 1 / c / z);

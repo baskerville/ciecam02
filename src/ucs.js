@@ -1,4 +1,4 @@
-import {degree, radian} from "./helpers";
+import {degree} from "ciebase";
 
 var {sqrt, pow, exp, log, cos, sin, atan2} = Math;
 
@@ -13,7 +13,7 @@ function Converter (name="UCS") {
 
 	function fromCam (CAM) {
 		var {J, M, h} = CAM,
-		    h_rad = radian(h),
+		    h_rad = degree.toRadian(h),
 		    J_p = (1 + 100 * c_1) * J / (1 + c_1 * J),
 		    M_p = (1 / c_2) * log(1 + c_2 * M),
 		    a_p = M_p * cos(h_rad),
@@ -27,7 +27,7 @@ function Converter (name="UCS") {
 		    M_p = sqrt(pow(a_p, 2) + pow(b_p, 2)),
 		    M = (exp(c_2 * M_p) - 1) / c_2,
 		    h_rad = atan2(b_p, a_p),
-		    h = degree(h_rad);
+		    h = degree.fromRadian(h_rad);
 		return {J: J, M: M, h: h};
 	}
 

@@ -8,15 +8,7 @@ var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = 
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj["default"] = obj; return newObj; } }
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-var _illuminant = require("./illuminant");
-
-var _illuminant2 = _interopRequireDefault(_illuminant);
-
-var _matrix = require("./matrix");
-
-var matrix = _interopRequireWildcard(_matrix);
+var _ciebase = require("ciebase");
 
 var _hq = require("./hq");
 
@@ -46,12 +38,12 @@ var M_CAT02 = [[0.7328, 0.4296, -0.1624], [-0.7036, 1.6975, 0.0061], [0.0030, 0.
 var M_HPE = [[0.38971, 0.68898, -0.07868], [-0.22981, 1.18340, 0.04641], [0.00000, 0.00000, 1.00000]];
 
 var XYZ_to_CAT02 = M_CAT02,
-    CAT02_to_XYZ = matrix.inverse(M_CAT02),
-    CAT02_to_HPE = matrix.product(M_HPE, matrix.inverse(M_CAT02)),
-    HPE_to_CAT02 = matrix.product(M_CAT02, matrix.inverse(M_HPE));
+    CAT02_to_XYZ = _ciebase.matrix.inverse(M_CAT02),
+    CAT02_to_HPE = _ciebase.matrix.product(M_HPE, _ciebase.matrix.inverse(M_CAT02)),
+    HPE_to_CAT02 = _ciebase.matrix.product(M_CAT02, _ciebase.matrix.inverse(M_HPE));
 
 var defaultViewingConditions = {
-	whitePoint: _illuminant2["default"].D65,
+	whitePoint: _ciebase.illuminant.D65,
 	adaptingLuminance: 40,
 	backgroundLuminance: 20,
 	surroundType: "average",
@@ -85,7 +77,7 @@ function Converter() {
 	    z = 1.48 + sqrt(n),
 	    D = viewingConditions.discounting ? 1 : F * (1 - 1 / 3.6 * exp(-(L_A + 42) / 92));
 
-	var RGB_w = matrix.multiply(M_CAT02, XYZ_w);
+	var RGB_w = _ciebase.matrix.multiply(M_CAT02, XYZ_w);
 
 	var _RGB_w$map = RGB_w.map(function (v) {
 		return D * Y_w / v + 1 - D;
@@ -101,7 +93,7 @@ function Converter() {
 	var A_w = achromaticResponse(RGB_aw);
 
 	function correspondingColors(XYZ) {
-		var _matrix$multiply = matrix.multiply(XYZ_to_CAT02, XYZ);
+		var _matrix$multiply = _ciebase.matrix.multiply(XYZ_to_CAT02, XYZ);
 
 		var _matrix$multiply2 = _slicedToArray(_matrix$multiply, 3);
 
@@ -119,18 +111,18 @@ function Converter() {
 		var G_c = _RGB_c[1];
 		var B_c = _RGB_c[2];
 
-		return matrix.multiply(CAT02_to_XYZ, [R_c / D_R, G_c / D_G, B_c / D_B]);
+		return _ciebase.matrix.multiply(CAT02_to_XYZ, [R_c / D_R, G_c / D_G, B_c / D_B]);
 	}
 
 	function adaptedResponses(RGB_c) {
-		return matrix.multiply(CAT02_to_HPE, RGB_c).map(function (v) {
+		return _ciebase.matrix.multiply(CAT02_to_HPE, RGB_c).map(function (v) {
 			var x = pow(F_L * abs(v) / 100, 0.42);
 			return sign(v) * 400 * x / (27.13 + x) + 0.1;
 		});
 	}
 
 	function reverseAdaptedResponses(RGB_a) {
-		return matrix.multiply(HPE_to_CAT02, RGB_a.map(function (v) {
+		return _ciebase.matrix.multiply(HPE_to_CAT02, RGB_a.map(function (v) {
 			var x = v - 0.1;
 			return sign(x) * 100 / F_L * pow(27.13 * abs(x) / (400 - abs(x)), 1 / 0.42);
 		}));
@@ -233,7 +225,7 @@ function Converter() {
 		var a = R_a - G_a * 12 / 11 + B_a / 11,
 		    b = (R_a + G_a - 2 * B_a) / 9,
 		    h_rad = atan2(b, a),
-		    h = (0, _helpers.degree)(h_rad),
+		    h = _ciebase.degree.fromRadian(h_rad),
 		    e_t = 1 / 4 * (cos(h_rad + 2) + 3.8),
 		    A = achromaticResponse(RGB_a),
 		    J = 100 * pow(A / A_w, c * z),
@@ -249,7 +241,7 @@ function Converter() {
 		var J = _fillOut.J;
 		var C = _fillOut.C;
 		var h = _fillOut.h;
-		var h_rad = (0, _helpers.radian)(h);
+		var h_rad = _ciebase.degree.toRadian(h);
 		var t = pow(C / (sqrt(J / 100) * pow(1.64 - pow(0.29, n), 0.73)), 10 / 9);
 		var e_t = 1 / 4 * (cos(h_rad + 2) + 3.8);
 		var A = A_w * pow(J / 100, 1 / c / z);
