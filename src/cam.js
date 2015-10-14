@@ -176,7 +176,7 @@ function Converter (viewingConditions={}, correlates=defaultCorrelates) {
 		    t = (5e4 / 13 * N_c * N_cb * e_t * sqrt(a*a + b*b) / (R_a + G_a + 21 / 20 * B_a)),
 		    C = pow(t, 0.9) * sqrt(J / 100) * pow(1.64 - pow(0.29, n), 0.73);
 
-		return fillOut(correlates, {J: J, C: C, h: h});
+		return fillOut(correlates, {J, C, h});
 	}
 
 	function toXyz (CAM) {

@@ -18,7 +18,7 @@ function Converter (name="UCS") {
 		    M_p = (1 / c_2) * log(1 + c_2 * M),
 		    a_p = M_p * cos(h_rad),
 		    b_p = M_p * sin(h_rad);
-		return {J_p: J_p, a_p: a_p, b_p: b_p};
+		return {J_p, a_p, b_p};
 	}
 
 	function toCam (UCS) {
@@ -28,7 +28,7 @@ function Converter (name="UCS") {
 		    M = (exp(c_2 * M_p) - 1) / c_2,
 		    h_rad = atan2(b_p, a_p),
 		    h = degree.fromRadian(h_rad);
-		return {J: J, M: M, h: h};
+		return {J, M, h};
 	}
 
 	function distance (UCS1, UCS2) {
