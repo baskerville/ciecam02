@@ -48,6 +48,17 @@ function toHue(H) {
 	return h;
 }
 
+var shortcuts = {
+	o: "ry",
+	s: "yg",
+	t: "g25b",
+	c: "gb",
+	a: "b25g",
+	v: "b25r",
+	m: "br",
+	p: "r25b"
+};
+
 function fromNotation(N) {
 	var _N$match = N.match(/^([a-z])(?:(.+)?([a-z]))?$/i);
 
@@ -65,7 +76,7 @@ function fromNotation(N) {
 	}
 
 	var _map = [H1, H2].map(function (v) {
-		return 100 * hueSymbols.indexOf(v.toUpperCase());
+		return shortcuts[v] ? fromNotation(shortcuts[v]) : 100 * hueSymbols.indexOf(v.toUpperCase());
 	});
 
 	var _map2 = _slicedToArray(_map, 2);

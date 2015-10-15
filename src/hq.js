@@ -34,6 +34,17 @@ function toHue (H) {
 	return h;
 }
 
+var shortcuts = {
+	o: "ry",
+	s: "yg",
+	t: "g25b",
+	c: "gb",
+	a: "b25g",
+	v: "b25r",
+	m: "br",
+	p: "r25b"
+};
+
 function fromNotation (N) {
 	var [, H1, P, H2] = N.match(/^([a-z])(?:(.+)?([a-z]))?$/i);
 	if (H2 === undefined) {
@@ -42,7 +53,9 @@ function fromNotation (N) {
 	if (P === undefined) {
 		P = "50";
 	}
-	[H1, H2] = [H1, H2].map(v => 100*hueSymbols.indexOf(v.toUpperCase()));
+	[H1, H2] = [H1, H2].map(v => shortcuts[v] ?
+	                        fromNotation(shortcuts[v]) :
+	                        100*hueSymbols.indexOf(v.toUpperCase()));
 	P = parseFloat(P) / 100;
 	return corLerp(H1, H2, P, "H");
 }
