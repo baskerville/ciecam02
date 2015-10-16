@@ -275,11 +275,7 @@ function Converter() {
 		return XYZ;
 	}
 
-	return {
-		fromXyz: fromXyz,
-		toXyz: toXyz,
-		fillOut: fillOut
-	};
+	return { fromXyz: fromXyz, toXyz: toXyz, fillOut: fillOut };
 }
 
 exports["default"] = Converter;

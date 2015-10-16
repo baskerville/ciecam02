@@ -219,11 +219,7 @@ function Converter (viewingConditions={}, correlates=defaultCorrelates) {
 		return XYZ;
 	}
 
-	return {
-		fromXyz: fromXyz,
-		toXyz: toXyz,
-		fillOut: fillOut
-	};
+	return {fromXyz, toXyz, fillOut};
 }
 
 export default Converter;

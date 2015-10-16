@@ -67,12 +67,7 @@ function Gamut(xyz, cam) {
 		});
 	}
 
-	return {
-		contains: contains,
-		limit: limit,
-		spine: spine,
-		crop: crop
-	};
+	return { contains: contains, limit: limit, spine: spine, crop: crop };
 }
 
 exports["default"] = Gamut;

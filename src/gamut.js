@@ -36,12 +36,7 @@ function Gamut (xyz, cam, epsilon=1e-6) {
 		return RGB.map(v => max(ZERO, min(ONE, v)));
 	}
 
-	return {
-		contains: contains,
-		limit: limit,
-		spine: spine,
-		crop: crop,
-	};
+	return {contains, limit, spine, crop};
 }
 
 export default Gamut;

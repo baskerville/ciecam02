@@ -35,11 +35,7 @@ function Converter (name="UCS") {
 		return sqrt(pow((UCS1.J_p - UCS2.J_p)/K_L, 2) + pow(UCS1.a_p - UCS2.a_p, 2) + pow(UCS1.b_p - UCS2.b_p, 2));
 	}
 
-	return {
-		fromCam: fromCam,
-		toCam: toCam,
-		distance: distance
-	};
+	return {fromCam, toCam, distance};
 }
 
 export default Converter;
