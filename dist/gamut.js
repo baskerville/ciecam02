@@ -32,7 +32,7 @@ function Gamut(xyz, cam) {
 			return v >= ZERO && v <= ONE;
 		}).reduce(function (a, b) {
 			return a && b;
-		});
+		}, true);
 		return [isInside, RGB];
 	}
 

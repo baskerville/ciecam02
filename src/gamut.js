@@ -11,7 +11,7 @@ function Gamut (xyz, cam, epsilon=1e-6) {
 
 	function contains (CAM) {
 		var RGB = xyz.toRgb(cam.toXyz(CAM)),
-		    isInside = RGB.map(v => (v >= ZERO && v <= ONE)).reduce((a, b) => a && b);
+		    isInside = RGB.map(v => (v >= ZERO && v <= ONE)).reduce((a, b) => a && b, true);
 		return [isInside, RGB];
 	}
 
