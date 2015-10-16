@@ -12,9 +12,10 @@ var _helpers = require("./helpers");
 
 function Gamut(xyz, cam) {
 	var epsilon = arguments.length <= 2 || arguments[2] === undefined ? 1e-6 : arguments[2];
-
-	var ZERO = -epsilon,
-	    ONE = 1 + epsilon;
+	var ZERO = -epsilon;
+	var ONE = 1 + epsilon;
+	var min = Math.min;
+	var max = Math.max;
 
 	var _map = ["000", "fff"].map(function (hex) {
 		return cam.fromXyz(xyz.fromRgb(_ciebase.rgb.fromHex(hex)));
@@ -60,10 +61,17 @@ function Gamut(xyz, cam) {
 		return (0, _helpers.lerp)(camBlack, camWhite, t);
 	}
 
+	function crop(RGB) {
+		return RGB.map(function (v) {
+			return max(ZERO, min(ONE, v));
+		});
+	}
+
 	return {
 		contains: contains,
 		limit: limit,
-		spine: spine
+		spine: spine,
+		crop: crop
 	};
 }
 

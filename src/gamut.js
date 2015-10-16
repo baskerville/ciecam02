@@ -3,7 +3,8 @@ import {lerp, distance} from "./helpers";
 
 function Gamut (xyz, cam, epsilon=1e-6) {
 	var ZERO = -epsilon,
-	    ONE = 1 + epsilon;
+	    ONE = 1 + epsilon,
+	    {min, max} = Math;
 	var [camBlack, camWhite] = ["000", "fff"].map(function (hex) {
 		return cam.fromXyz(xyz.fromRgb(rgb.fromHex(hex)));
 	});
@@ -31,10 +32,15 @@ function Gamut (xyz, cam, epsilon=1e-6) {
 		return lerp(camBlack, camWhite, t);
 	}
 
+	function crop (RGB) {
+		return RGB.map(v => max(ZERO, min(ONE, v)));
+	}
+
 	return {
 		contains: contains,
 		limit: limit,
-		spine: spine
+		spine: spine,
+		crop: crop,
 	};
 }
 
