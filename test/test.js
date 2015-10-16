@@ -1,15 +1,12 @@
-var CamConv = require("../dist/cam"),
-    XyzConv = require("ciebase").xyz,
-    UcsConv = require("../dist/ucs"),
-    assert = require('chai').assert,
+var assert = require('chai').assert,
     ε = 0.05;
 
 describe("Roundtrips", function () {
 	var rgb = require("ciebase").rgb,
+	    xyz = require("ciebase").xyz(),
+	    cam = require("../dist/cam")(),
+	    ucs = require("../dist/ucs")(),
 	    hq = require("../dist/hq"),
-	    xyz = XyzConv(),
-	    cam = CamConv(),
-	    ucs = UcsConv(),
 	    hex = "#e73e01",
 	    RGB = rgb.fromHex(hex),
 	    XYZ = xyz.fromRgb(RGB),
@@ -35,8 +32,26 @@ describe("Roundtrips", function () {
 	});
 });
 
+describe("Gamut", function () {
+	var rgb = require("ciebase").rgb,
+	    xyz = require("ciebase").xyz(),
+	    cam = require("../dist/cam")(),
+	    gamut = require("../dist/gamut")(xyz, cam),
+	    camRed = cam.fromXyz(xyz.fromRgb(rgb.fromHex("f00"))),
+	    camBlue = cam.fromXyz(xyz.fromRgb(rgb.fromHex("00f")));
+	it("Contains", function () {
+		assert.ok(gamut.contains(camRed)[0]);
+		assert.ok(gamut.contains(camBlue)[0]);
+		camRed.C += 1;
+		camBlue.C -= 1;
+		assert.notOk(gamut.contains(camRed)[0]);
+		assert.notOk(gamut.contains(camBlue)[0]);
+	});
+});
+
 // http://rit-mcsl.org/fairchild/files/AppModEx.xls
 describe("Fairchild examples", function () {
+	var CamConv = require("../dist/cam");
 	it("Case 1", function () {
 		var cc = CamConv({
 			whitePoint: [95.05, 100.00, 108.88],

@@ -1,6 +1,6 @@
 {
   "name": "ciecam02",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "description": "An implementation of CIECAM02",
   "scripts": {
     "test": "mocha"
