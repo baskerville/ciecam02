@@ -35,14 +35,14 @@ function toHue (H) {
 }
 
 var shortcuts = {
-	o: "ry",
-	s: "yg",
-	t: "g25b",
-	c: "gb",
-	a: "b25g",
-	v: "b25r",
-	m: "br",
-	p: "r25b"
+	O: "RY",
+	S: "YG",
+	T: "G25B",
+	C: "GB",
+	A: "B25G",
+	V: "B25R",
+	M: "BR",
+	P: "R25B"
 };
 
 function fromNotation (N) {
@@ -53,9 +53,11 @@ function fromNotation (N) {
 	if (P === undefined) {
 		P = "50";
 	}
-	[H1, H2] = [H1, H2].map(v => shortcuts[v] ?
-	                        fromNotation(shortcuts[v]) :
-	                        100*hueSymbols.indexOf(v.toUpperCase()));
+	[H1, H2] = [H1, H2].map(function (v) {
+		v = v.toUpperCase();
+		var sc = shortcuts[v];
+		return sc ? fromNotation(sc) : 100*hueSymbols.indexOf(v);
+	});
 	P = parseFloat(P) / 100;
 	return corLerp(H1, H2, P, "H");
 }

@@ -49,14 +49,14 @@ function toHue(H) {
 }
 
 var shortcuts = {
-	o: "ry",
-	s: "yg",
-	t: "g25b",
-	c: "gb",
-	a: "b25g",
-	v: "b25r",
-	m: "br",
-	p: "r25b"
+	O: "RY",
+	S: "YG",
+	T: "G25B",
+	C: "GB",
+	A: "B25G",
+	V: "B25R",
+	M: "BR",
+	P: "R25B"
 };
 
 function fromNotation(N) {
@@ -76,7 +76,9 @@ function fromNotation(N) {
 	}
 
 	var _map = [H1, H2].map(function (v) {
-		return shortcuts[v] ? fromNotation(shortcuts[v]) : 100 * hueSymbols.indexOf(v.toUpperCase());
+		v = v.toUpperCase();
+		var sc = shortcuts[v];
+		return sc ? fromNotation(sc) : 100 * hueSymbols.indexOf(v);
 	});
 
 	var _map2 = _slicedToArray(_map, 2);
