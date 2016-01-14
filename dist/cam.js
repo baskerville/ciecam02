@@ -1,12 +1,10 @@
 "use strict";
 
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-
-var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; })();
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj["default"] = obj; return newObj; } }
 
 var _ciebase = require("ciebase");
 
@@ -16,16 +14,20 @@ var hq = _interopRequireWildcard(_hq);
 
 var _helpers = require("./helpers");
 
-var _moutObject = require("mout/object");
+var _object = require("mout/object");
 
-var pow = Math.pow;
-var sqrt = Math.sqrt;
-var exp = Math.exp;
-var abs = Math.abs;
-var sign = Math.sign;
-var sin = Math.sin;
-var cos = Math.cos;
-var atan2 = Math.atan2;
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+var _Math = Math;
+var pow = _Math.pow;
+var sqrt = _Math.sqrt;
+var exp = _Math.exp;
+var abs = _Math.abs;
+var sign = _Math.sign;
+var _Math2 = Math;
+var sin = _Math2.sin;
+var cos = _Math2.cos;
+var atan2 = _Math2.atan2;
 
 var surrounds = {
 	average: { F: 1.0, c: 0.69, N_c: 1.0 },
@@ -58,15 +60,15 @@ function Converter() {
 	var viewingConditions = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	var correlates = arguments.length <= 1 || arguments[1] === undefined ? defaultCorrelates : arguments[1];
 
-	viewingConditions = (0, _moutObject.merge)(defaultViewingConditions, viewingConditions);
+	viewingConditions = (0, _object.merge)(defaultViewingConditions, viewingConditions);
 
 	var XYZ_w = viewingConditions.whitePoint;
 	var L_A = viewingConditions.adaptingLuminance;
 	var Y_b = viewingConditions.backgroundLuminance;
-	var _surrounds$viewingConditions$surroundType = surrounds[viewingConditions.surroundType];
-	var F = _surrounds$viewingConditions$surroundType.F;
-	var c = _surrounds$viewingConditions$surroundType.c;
-	var N_c = _surrounds$viewingConditions$surroundType.N_c;
+	var _surrounds$viewingCon = surrounds[viewingConditions.surroundType];
+	var F = _surrounds$viewingCon.F;
+	var c = _surrounds$viewingCon.c;
+	var N_c = _surrounds$viewingCon.N_c;
 	var Y_w = XYZ_w[1];
 
 	var k = 1 / (5 * L_A + 1),
@@ -278,5 +280,5 @@ function Converter() {
 	return { fromXyz: fromXyz, toXyz: toXyz, fillOut: fillOut };
 }
 
-exports["default"] = Converter;
-module.exports = exports["default"];
+exports.default = Converter;
+module.exports = exports['default'];

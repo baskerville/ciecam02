@@ -6,13 +6,14 @@ Object.defineProperty(exports, "__esModule", {
 
 var _ciebase = require("ciebase");
 
-var sqrt = Math.sqrt;
-var pow = Math.pow;
-var exp = Math.exp;
-var log = Math.log;
-var cos = Math.cos;
-var sin = Math.sin;
-var atan2 = Math.atan2;
+var _Math = Math;
+var sqrt = _Math.sqrt;
+var pow = _Math.pow;
+var exp = _Math.exp;
+var log = _Math.log;
+var cos = _Math.cos;
+var sin = _Math.sin;
+var atan2 = _Math.atan2;
 
 var uniformSpaces = {
 	LCD: { K_L: 0.77, c_1: 0.007, c_2: 0.0053 },
@@ -58,5 +59,5 @@ function Converter() {
 	return { fromCam: fromCam, toCam: toCam, distance: distance };
 }
 
-exports["default"] = Converter;
-module.exports = exports["default"];
+exports.default = Converter;
+module.exports = exports['default'];

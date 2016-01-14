@@ -1,16 +1,9 @@
 {
   "name": "ciecam02",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "description": "An implementation of CIECAM02",
   "scripts": {
     "test": "mocha"
-  },
-  "devDependencies": {
-    "chai": "*",
-    "gulp": "*",
-    "gulp-babel": "*",
-    "gulp-jshint": "*",
-    "mocha": "*"
   },
   "repository": "github:baskerville/ciecam02.git",
   "keywords": [
@@ -21,8 +14,18 @@
   "license": "BSD-2-Clause",
   "bugs": "https://github.com/baskerville/ciecam02/issues",
   "homepage": "https://github.com/baskerville/ciecam02",
+  "devDependencies": {
+    "babel-plugin-add-module-exports": "^0.1.2",
+    "babel-preset-es2015": "^6.3.13",
+    "chai": "^3.4.1",
+    "gulp": "^3.9.0",
+    "gulp-babel": "^6.1.1",
+    "gulp-jshint": "^2.0.0",
+    "jshint": "^2.8.0",
+    "mocha": "^2.3.4"
+  },
   "dependencies": {
-    "ciebase": "*",
-    "mout": "*"
+    "ciebase": "^0.1.1",
+    "mout": "^0.11.1"
   }
 }

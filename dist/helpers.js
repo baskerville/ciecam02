@@ -3,16 +3,18 @@
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+exports.cfs = exports.distance = exports.lerp = exports.corLerp = undefined;
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
+var _object = require("mout/object");
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var _moutObject = require("mout/object");
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-var abs = Math.abs;
-var pow = Math.pow;
-var sqrt = Math.sqrt;
+var _Math = Math;
+var abs = _Math.abs;
+var pow = _Math.pow;
+var sqrt = _Math.sqrt;
 
 var hueMax = {
 	h: 360,
@@ -51,7 +53,7 @@ function distance(start, end) {
 }
 
 function cfs(str) {
-	return _moutObject.merge.apply(undefined, _toConsumableArray(str.split("").map(function (v) {
+	return _object.merge.apply(undefined, _toConsumableArray(str.split("").map(function (v) {
 		return _defineProperty({}, v, true);
 	})));
 }
